@@ -1,0 +1,150 @@
+PROYECTO DE PROCESAMIENTO DE DOCUMENTOS
+
+
+
+ Desarrollo de Flujo Multiagente en Python
+
+
+
+Instrucción inicial:
+
+
+
+Necesito que asumas el rol de un copiloto de desarrollo de software experto en IA, procesamiento de documentos y análisis de datos. Mi objetivo es construir un sistema robusto y escalable en Python para el procesamiento y análisis de documentos PDF históricos sobre intervenciones en pozos de petróleo. Este sistema debe ser capaz de extraer información crítica y generar reportes de abandono.
+
+
+
+Mis Requerimientos Clave:
+
+
+
+Procesamiento de Documentos (Backend Core):
+
+
+
+OCR y Extracción de Datos: El OCR debe ser de alta calidad, preferiblemente usando la API de Gemini, para manejar documentos escaneados y extraer datos estructurados (fechas, medidas, datos ingenieriles) y texto no estructurado con precisión.
+
+
+
+Persistencia de Datos: Toda la información extraída debe ser almacenada en una base de datos SQL. He decidido usar Supabase para este fin, aprovechando su capacidad para actuar como backend de almacenamiento y autenticación.
+
+
+
+Arquitectura y Funcionalidad:
+
+Flujo Multiagente (MCP): Quiero implementar un sistema con agentes especializados. Pienso en roles como:
+
+-Agente de Pre-procesamiento: Limpieza y estandarización del PDF.
+
+
+
+-Agente de Extracción: Focalizado en la identificación y extracción de datos clave.
+
+
+
+-Agente RAG: Para manejar las consultas del usuario.
+
+
+
+-Agente de Validación: Para asegurar la consistencia y calidad de los datos extraídos. 
+
+
+
+-Agente juez: Valida el alineamiento del comportamiento del RAG, los datos extraidos y respuestas propuestas de manera que el usuario pueda obtener la informacion relevantea su pregunta.
+
+
+
+-Agente de limpieza: Debido a que los documentos poseen demasiada informacion no relevante para la construccion de reportes de abandono, este agente debe evaluar la pertinencia de la informacion a almacenar de acuerdo a ciertas preguntas fundamentales (que pueden ser ingresadas en el system prompt) y asi filtrar los datos. Así mismo, debido a que los documentos en ciertas páginas poseen formato tipo formulario, hacer que el sistema de extraccion de informacion fuera conciente del formato sería un feature deseable.
+
+
+
+-Interacción RAG: El usuario debe poder hacer preguntas en lenguaje natural sobre los documentos, obteniendo respuestas precisas basadas en la información extraída y almacenada.
+
+
+
+- Implementación de las habilidades de alto nivel de RAGFLOW: Para un mejor performance de mi sistema, deseo implementar las funcionalidades de RagFlow, un ecosistema de interacción RAG con entendimiento de formato de documento de alto nivel. Puedes encontrar informacion en el siguiente enlace: https://github.com/infiniflow/ragflow.git
+
+
+
+Integraciones y Automatización:
+
+
+
+-n8n para Automatización: Quiero integrar mi desarrollo local con n8n para automatizar el flujo de trabajo. Un ejemplo sería que un nuevo documento PDF subido a un bucket dispare el proceso de extracción.
+
+
+
+-AgentQ para Mejora: Planeo utilizar AgentQ para validar y enriquecer los datos ingenieriles extraídos, buscando una mayor calidad y fiabilidad en la información.
+
+
+
+Componentes de la Aplicación Final:
+
+
+
+-Interfaz de Usuario (Front-end): Necesito una aplicación web que permita subir documentos, ver el estado del procesamiento y, lo más importante, interactuar con los datos a través de una interfaz de chat para las consultas RAG.
+
+
+
+ Consideraciones y Limitaciones que He Identificado:
+
+
+
+-Estructura del Proyecto: He pensado en una estructura modular. La idea es tener directorios separados para los agentes, servicios, utilidades, el front-end, y la configuración.
+
+
+
+-Integración con n8n y AgentQ:
+
+
+
+-- n8n: Usaré webhooks para activar mi código en Python. La seguridad entre n8n y mi servicio es un punto crítico.
+
+
+
+-- AgentQ: Entiendo que su uso tiene un costo. Por lo tanto, lo usaré de forma selectiva, solo para validar la información más crítica.
+
+
+
+Escalabilidad y Despliegue:
+
+
+
+-Backend: Docker es mi primera opción para contenerizar el servicio. Esto me permitirá un despliegue sencillo en plataformas como AWS o Google Cloud.
+
+
+
+-Frontend: El front-end, al ser una SPA, lo desplegaré en servicios de hosting estático como Vercel o Netlify.
+
+
+
+-Base de Datos: Confío en la escalabilidad que ofrece Supabase.
+
+
+
+-Ecosistema del aplicativo y solicitudes: Deseo emplear FastAPI para el manejo de solicitudes API y Uvicorn para el lanzamiento en local del aplicativo.
+
+
+
+
+
+Tu Rol como Copiloto:
+
+A partir de toda esta información, necesito que me ayudes con lo siguiente:
+
+Propuestas de Estructura de Código: Dame recomendaciones concretas para la organización de los módulos.
+
+Recomendaciones de Implementación: Sugiere las mejores prácticas para la implementación de cada agente y la comunicación entre ellos.
+
+Diseño de Datos: Propón un esquema de base de datos inicial para Supabase que sea adecuado para almacenar la información de los pozos de petróleo.
+
+Optimización y Rendimiento: Advierte sobre posibles cuellos de botella y ofrece soluciones.
+
+
+
+
+
+Para una propuesta de la estructura de mi proyecto, he anexado una imagen con una estructura tradicional de flujos multiagente.
+
+
+
