@@ -1,0 +1,21 @@
+6. MVP posible en una semana
+
+Montar RAGFlow en contenedor y procesar documentos.
+
+Crear un microservicio en Python (FastAPI):
+
+Endpoint /query que recibe un prompt.
+
+Consulta RAGFlow → devuelve chunks.
+
+Llama a un LLM para resumir y organizar.
+
+Genera un PDF con reportlab.
+
+Integrar con n8n para:
+
+Automatizar cargas de documentos.
+
+Guardar los reportes generados en Supabase.
+
+Notificar al usuario por correo o Slack.
