@@ -3,4 +3,5 @@ NOI-RAG-Credentials.txt
 README copy.md
 
 # processed data from RAGFlow
-app/database/data
+app/database/data/sql
+app/database/data/minio
