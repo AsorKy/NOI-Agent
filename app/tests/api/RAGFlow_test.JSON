@@ -1,0 +1,79 @@
+{
+  "info": {
+    "name": "RAGFlow API Tests",
+    "_postman_id": "ragflow-test-collection",
+    "description": "Colección de pruebas para RAGFlow (datasets y documentos)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Datasets",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://172.29.192.1:9380/api/v1/datasets",
+          "protocol": "http",
+          "host": [
+            "172.29.192.1"
+          ],
+          "port": "9380",
+          "path": [
+            "api",
+            "v1",
+            "datasets"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Upload Document to Dataset",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "multipart/form-data",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/ruta/a/tu/archivo.pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://172.29.192.1:9380/api/v1/datasets/{{dataset_id}}/documents",
+          "protocol": "http",
+          "host": [
+            "172.29.192.1"
+          ],
+          "port": "9380",
+          "path": [
+            "api",
+            "v1",
+            "datasets",
+            "{{dataset_id}}",
+            "documents"
+          ]
+        }
+      }
+    }
+  ]
+}

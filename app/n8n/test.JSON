@@ -1,0 +1,17 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://localhost:9380/api/v1/pipelines", 
+        "method": "GET",
+        "authentication": "none",
+        "headers": {
+          "Authorization": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+        }
+      },
+      "name": "Check RAGFlow API Key",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1
+    }
+  ]
+}

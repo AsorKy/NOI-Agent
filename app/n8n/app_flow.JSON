@@ -1,0 +1,184 @@
+{
+  "name": "Google Drive → Supabase → RAGFlow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI",
+          "mode": "list",
+          "cachedResultName": "CRC_Agents",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -304
+      ],
+      "id": "e7cf7579-5da0-4170-819d-7035a9f2a41e",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jS1NhIXrB8G5MoEG",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        784,
+        -304
+      ],
+      "id": "005b1ffa-037f-4be6-99ec-67eb27f4ef7b",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jS1NhIXrB8G5MoEG",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendBinaryData": true,
+        "binaryPropertyName": "data",
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <SUPABASE_SERVICE_ROLE_KEY>"
+            },
+            {
+              "name": "apikey",
+              "value": "<SUPABASE_SERVICE_ROLE_KEY>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "05b83262-d557-49ea-8fa0-4a4e9ea1cfa0",
+      "name": "Upload to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.29.192.1/api/documents",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "binaryPropertyName": "data"
+            },
+            {
+              "parameterType": "formData",
+              "name": "db_name",
+              "value": "NOI-N8N-test"
+            }
+          ]
+        },
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1248,
+        -96
+      ],
+      "id": "bd6e6bf0-762b-47e9-8375-47ca1250dcda",
+      "name": "Send to RAGFlow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase": {
+      "main": [
+        [
+          {
+            "node": "Send to RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7a11c08b-df3b-466d-9c07-d62af0c62973",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "237ecc72876c41bc604983a896799bf750dc6e2dda59ebce87a4871aab2b9f18"
+  },
+  "id": "0DQzp7VmspuRuakS",
+  "tags": []
+}
