@@ -24,8 +24,8 @@
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        560,
-        -304
+        -48,
+        48
       ],
       "id": "e7cf7579-5da0-4170-819d-7035a9f2a41e",
       "name": "Google Drive Trigger",
@@ -49,8 +49,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        784,
-        -304
+        176,
+        48
       ],
       "id": "005b1ffa-037f-4be6-99ec-67eb27f4ef7b",
       "name": "Download file",
@@ -63,59 +63,441 @@
     },
     {
       "parameters": {
-        "requestMethod": "POST",
-        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
-        "sendBinaryData": true,
-        "binaryPropertyName": "data",
-        "headerParametersUi": {
-          "parameter": [
-            {
-              "name": "Authorization",
-              "value": "Bearer <SUPABASE_SERVICE_ROLE_KEY>"
-            },
-            {
-              "name": "apikey",
-              "value": "<SUPABASE_SERVICE_ROLE_KEY>"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/pdf"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "05b83262-d557-49ea-8fa0-4a4e9ea1cfa0",
-      "name": "Upload to Supabase",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 1,
-      "position": [
-        1024,
-        -304
-      ]
-    },
-    {
-      "parameters": {
         "method": "POST",
-        "url": "http://172.29.192.1/api/documents",
+        "url": "http://172.29.192.1/api/v1/datasets/{{dataset_id}}/chunks",
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
           "parameters": [
             {
               "parameterType": "formBinaryData",
-              "name": "file",
-              "binaryPropertyName": "data"
+              "name": "file"
             },
             {
-              "parameterType": "formData",
               "name": "db_name",
               "value": "NOI-N8N-test"
             }
           ]
         },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1968,
+        -48
+      ],
+      "id": "d7b8de50-0f7a-4947-8fe8-56fc114d5fec",
+      "name": "Send to RAGFlow",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1296,
+        512
+      ],
+      "id": "0f365605-388d-49ff-9af6-ef168654a0ce",
+      "name": "GET IDs from Supabase",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        -48
+      ],
+      "id": "fb346ee0-62ee-4166-b637-fd3de9ae5916",
+      "name": "Compare Data Supabase_RGFlow",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        -64
+      ],
+      "id": "53b6302c-52eb-44e6-8321-8220d4a514d2",
+      "name": "Determine Unprocessed Documents",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1744,
+        -48
+      ],
+      "id": "6f9d86ca-cc02-42db-8d53-ae9ac1a30eda",
+      "name": "GET PDF from Supabase",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        -48
+      ],
+      "id": "f02b248f-1031-4e34-8396-032cd56a0e26",
+      "name": "Parse PDF keys to RAGFlow POST",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.29.192.1/api/v1/datasets/{{dataset_id}}/chunks",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file"
+            },
+            {
+              "name": "db_name",
+              "value": "NOI-N8N-test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2416,
+        -48
+      ],
+      "id": "d9469b8e-d8b2-4bd7-a3ba-f9be52371d3a",
+      "name": "Activate RAGFlow pipeline",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$node[\"Download file\"].json[\"name\"]}}",
+        "options": {},
         "headerParametersUi": {
           "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        }
+      },
+      "id": "ce00a380-2f81-4083-8d1b-7aa9ff8af099",
+      "name": "Update Supabase Buffer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        -48
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        624,
+        16
+      ],
+      "id": "315ff05c-e4b3-4731-a893-2044bfe09b05",
+      "name": "Upload to buffer switch"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "c28b1527-d5d8-4cc3-bf9f-b3c8905d8210",
+      "name": "Insert Buffer Record: Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        848,
+        -64
+      ],
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"failed\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "841f296f-0c70-40df-8555-39f8e998ea07",
+      "name": "Insert Buffer Record: Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        848,
+        320
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6dc2557e-c284-4727-81b2-dcaaa9ef453e",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1296,
+        320
+      ],
+      "id": "09de525e-12ad-4f6d-84bc-8639b22af8b8",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        336
+      ],
+      "id": "9bb79b71-51fe-4b60-bced-33dc95a86a7f",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DlFWNGz93OouRE3S",
+          "name": "Supabase account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        -64
+      ],
+      "id": "80347da5-d209-41cb-8f8f-2e48ffe2fac6",
+      "name": "GET Unprocessed IDS From Buffer",
+      "credentials": {
+        "supabaseApi": {
+          "id": "DlFWNGz93OouRE3S",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer_errors",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"error\": \"{{$json.error.message}}\",\n  \"status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "6045ad47-33f3-4958-aea0-8221a25b929c",
+      "name": "Insert Error Buffer Record: Pending",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        320
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
             {
               "name": "Authorization",
               "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
@@ -127,11 +509,144 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1248,
-        -96
+        848,
+        128
       ],
-      "id": "bd6e6bf0-762b-47e9-8375-47ca1250dcda",
-      "name": "Send to RAGFlow"
+      "id": "58e36293-11ef-47b8-a8b5-0eb2a0f8449d",
+      "name": "GET Document List RAGFlow"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "python",
+        "pythonCode": "data = dict(_input.item.json.data)\ndocument_list = data.get(\"docs\", [])\n\nragflow_doc_ids = {\n    \"doc_id\": [],\n    \"pross_status\": [],\n    \"file_name\": [],\n    \"processed_at\": []\n}\n\nfor java_doc in document_list:\n  py_doc = java_doc.to_py()\n  ragflow_doc_ids[\"doc_id\"].append(py_doc.get(\"id\"))\n  ragflow_doc_ids[\"pross_status\"].append(py_doc.get(\"run\"))\n  ragflow_doc_ids[\"file_name\"].append(py_doc.get(\"name\"))\n  ragflow_doc_ids[\"processed_at\"].append(py_doc.get(\"process_begin_at\"))\n\nreturn {\"rag_docs\":ragflow_doc_ids }\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        128
+      ],
+      "id": "daece5c2-5e7f-4dc1-afba-96f478c3a154",
+      "name": "Code in Python (Beta)"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$node[\"Download file\"].json[\"name\"]}}",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        }
+      },
+      "id": "4c972b4f-d8fe-4101-81c4-59f587bb83fd",
+      "name": "Upload to Supabase1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        400,
+        48
+      ],
+      "alwaysOutputData": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2b54888-a471-4979-b599-131954118c5a",
+              "name": "NOI-RAGFlow-dataset-ID",
+              "value": "bddb8cda998711f094870242ac120006",
+              "type": "string"
+            },
+            {
+              "id": "3b66e7b4-5f94-476c-9097-d9238813bde8",
+              "name": "RAGFLOW-SERVER-API-1",
+              "value": "172.29.192.1:9380",
+              "type": "string"
+            },
+            {
+              "id": "3246288f-3b2a-4fcc-b6fc-1edc6326c662",
+              "name": "SUPABASE-PDF-BUCKET-URL",
+              "value": "erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket",
+              "type": "string"
+            },
+            {
+              "id": "432c5424-48c2-4672-9928-3538606906bd",
+              "name": "RAGFLOW-API-KEY",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm",
+              "type": "string"
+            },
+            {
+              "id": "023f7d26-d93c-4e3e-aac4-b568601929f8",
+              "name": "NGROK-TOKEN",
+              "value": "33CuVlZm2WWXBMBSDIlA0NWKuWd_iKwbvtk5K7py1x621UBd",
+              "type": "string"
+            },
+            {
+              "id": "68526840-7592-46e6-9278-504dcdd2356f",
+              "name": "RAGFLOW-LOCAL-SERVER",
+              "value": "https://unsaltatory-tinisha-visionally.ngrok-free.dev ",
+              "type": "string"
+            },
+            {
+              "id": "66f39a3b-945a-4a24-a844-3dab72871c74",
+              "name": "NGROK-DEV-TOKEN",
+              "value": "33CuVlZm2WWXBMBSDIlA0NWKuWd_iKwbvtk5K7py1x621UBd",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        624,
+        432
+      ],
+      "id": "8e978ccb-ba08-40bb-a40f-c192c87d2b6b",
+      "name": "ENV_VARIABLES"
+    },
+    {
+      "parameters": {
+        "url": "http://172.29.192.1:9380/api/v1/datasets/bddb8cda998711f094870242ac120006/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -48,
+        736
+      ],
+      "id": "476d8cb6-a30f-441d-9427-f127da083e70",
+      "name": "GET Document List RAGFlow1",
+      "disabled": true
     }
   ],
   "pinData": {},
@@ -143,6 +658,11 @@
             "node": "Download file",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "ENV_VARIABLES",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -151,18 +671,210 @@
       "main": [
         [
           {
-            "node": "Upload to Supabase",
+            "node": "Upload to Supabase1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Upload to Supabase": {
+    "Send to RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "Parse PDF keys to RAGFlow POST",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET IDs from Supabase": {
+      "main": [
+        [
+          {
+            "node": "Compare Data Supabase_RGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine Unprocessed Documents": {
+      "main": [
+        [
+          {
+            "node": "Compare Data Supabase_RGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Data Supabase_RGFlow": {
+      "main": [
+        [
+          {
+            "node": "GET PDF from Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET PDF from Supabase": {
       "main": [
         [
           {
             "node": "Send to RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse PDF keys to RAGFlow POST": {
+      "main": [
+        [
+          {
+            "node": "Activate RAGFlow pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activate RAGFlow pipeline": {
+      "main": [
+        [
+          {
+            "node": "Update Supabase Buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert Buffer Record: Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Upload": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Failed": {
+      "main": [
+        [
+          {
+            "node": "Insert Error Buffer Record: Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Unprocessed IDS From Buffer": {
+      "main": [
+        [
+          {
+            "node": "Determine Unprocessed Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Error Buffer Record: Pending": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Document List RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Beta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ENV_VARIABLES": {
+      "main": [
+        [
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch",
             "type": "main",
             "index": 0
           }
@@ -174,7 +886,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7a11c08b-df3b-466d-9c07-d62af0c62973",
+  "versionId": "36aa0190-698a-43a9-9e76-efe638aa18a4",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "237ecc72876c41bc604983a896799bf750dc6e2dda59ebce87a4871aab2b9f18"
