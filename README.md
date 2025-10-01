@@ -192,3 +192,11 @@ Copiar los archivos MINIO  a local
 
 C:\mc.exe mirror ragflow/016d2eb897c611f0996a0242ac120006 C:\CodeProjects\Agents\ragflow_backup\minio\016d2e
 
+
+# Activacion de ngrok para pruebas locales
+
+para activar el puerto local seguro del servicio, activamos primero el http seguro
+
+ngrok http 9380
+
+donde 9380 es el puerto que RAGFlow expone para su API
