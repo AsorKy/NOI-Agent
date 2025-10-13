@@ -13,10 +13,10 @@
         "triggerOn": "specificFolder",
         "folderToWatch": {
           "__rl": true,
-          "value": "1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI",
+          "value": "1iGshhzsCrRUe2RTMbYv3TgjmxtFJP85_",
           "mode": "list",
-          "cachedResultName": "CRC_Agents",
-          "cachedResultUrl": "https://drive.google.com/drive/folders/1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI"
+          "cachedResultName": "CRC_NOI_Agent",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1iGshhzsCrRUe2RTMbYv3TgjmxtFJP85_"
         },
         "event": "fileCreated",
         "options": {}
@@ -24,15 +24,15 @@
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -656,
-        784
+        128,
+        1424
       ],
-      "id": "a4ec2fa8-a2e5-481d-826f-81dc477fe741",
+      "id": "21b8c08b-5773-4b09-92c3-d4e6c2ac071d",
       "name": "Google Drive Trigger",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "jS1NhIXrB8G5MoEG",
-          "name": "Unnamed credential"
+          "id": "6sU8QsrVmPgZUn7D",
+          "name": "Google Drive account"
         }
       }
     },
@@ -49,15 +49,15 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -432,
-        784
+        352,
+        1424
       ],
-      "id": "586dff5b-d979-4bf5-8a3c-d6923ffb6c88",
+      "id": "92d7076c-b930-469a-a799-93f8189dcf37",
       "name": "Download file",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "jS1NhIXrB8G5MoEG",
-          "name": "Unnamed credential"
+          "id": "6sU8QsrVmPgZUn7D",
+          "name": "Google Drive account"
         }
       }
     },
@@ -84,10 +84,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5904,
-        640
+        9184,
+        1216
       ],
-      "id": "b0d3f138-5b2b-4312-b2ee-3fd65d0ef9fa",
+      "id": "a242dadd-1f70-4223-8202-441f9de54cf6",
       "name": "Send to RAGFlow",
       "disabled": true
     },
@@ -98,10 +98,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5248,
-        864
+        8528,
+        1440
       ],
-      "id": "ad8ccc83-ac27-434f-a1fc-371407403299",
+      "id": "3208c097-9ca5-4c94-8e19-d440aab8363e",
       "name": "GET IDs from Supabase",
       "disabled": true
     },
@@ -113,10 +113,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5456,
-        640
+        8736,
+        1216
       ],
-      "id": "d43614ff-c544-4001-a047-db97b608e21a",
+      "id": "9a6631f0-f85b-4520-a669-e00734a76f07",
       "name": "Compare Data Supabase_RGFlow",
       "disabled": true
     },
@@ -128,10 +128,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5248,
-        640
+        8528,
+        1216
       ],
-      "id": "d7c318b3-a505-4ea2-90f3-db4a105732fa",
+      "id": "575dcf31-83ef-4559-9d80-5f88b7d754e1",
       "name": "Determine Unprocessed Documents",
       "disabled": true
     },
@@ -142,10 +142,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5680,
-        640
+        8960,
+        1216
       ],
-      "id": "4a36d931-d0ed-49a5-8dbc-d8eac83f5b47",
+      "id": "10883cd0-64b1-4e42-920c-246c55794a01",
       "name": "GET PDF from Supabase",
       "disabled": true
     },
@@ -157,10 +157,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6128,
-        640
+        9408,
+        1216
       ],
-      "id": "f781fda9-8d2f-4a88-ad6c-e4c50d66405b",
+      "id": "317d906e-fc5e-4259-a6ee-11e19716c1ab",
       "name": "Parse PDF keys to RAGFlow POST",
       "disabled": true
     },
@@ -187,10 +187,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6352,
-        640
+        9632,
+        1216
       ],
-      "id": "5241f726-0341-4244-9086-49382e2e4390",
+      "id": "a2cba5c3-1a6a-467d-b2a1-e788554c6659",
       "name": "Activate RAGFlow pipeline",
       "disabled": true
     },
@@ -212,13 +212,13 @@
           ]
         }
       },
-      "id": "2bbdebbf-f2e6-4eea-aa11-0eff1b7ef719",
+      "id": "c964d660-53a7-4ac4-9b02-35f48f0cce15",
       "name": "Update Supabase Buffer",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        6576,
-        640
+        9856,
+        1216
       ],
       "disabled": true
     },
@@ -330,10 +330,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        16,
-        752
+        800,
+        1392
       ],
-      "id": "a051e7e4-b7df-4078-8e03-f5e14e9a4185",
+      "id": "3603c049-9626-4645-8787-f78181f787b3",
       "name": "Upload to buffer switch"
     },
     {
@@ -347,13 +347,13 @@
         "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
         "queryParametersJson": "{}"
       },
-      "id": "796f6564-0a02-4861-b9c0-51bef080bf6e",
+      "id": "7d271e86-1810-4301-8119-5aac49ec541f",
       "name": "Insert Buffer Record: Upload",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        240,
-        608
+        1024,
+        1248
       ],
       "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
     },
@@ -368,13 +368,13 @@
         "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
         "queryParametersJson": "{}"
       },
-      "id": "772a3b34-e558-4534-acdd-d8345b52da86",
+      "id": "7ca816a0-4eb8-4e3b-9390-decae69c267e",
       "name": "Insert Buffer Record: Failed",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        1488,
-        2288
+        832,
+        3280
       ],
       "disabled": true,
       "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
@@ -407,10 +407,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1936,
-        2288
+        1280,
+        3280
       ],
-      "id": "43d86173-0fa9-42a2-bdf2-78be4c6b7d0f",
+      "id": "e33e6c69-91e7-417a-8d69-4f7571efcd7e",
       "name": "If",
       "disabled": true
     },
@@ -421,17 +421,11 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2160,
-        2304
+        1504,
+        3296
       ],
-      "id": "99302712-36ae-4276-88cc-4510f8d0c125",
+      "id": "23dbd982-a98d-4732-b53a-f9649b7eb24c",
       "name": "Update a row",
-      "credentials": {
-        "supabaseApi": {
-          "id": "DlFWNGz93OouRE3S",
-          "name": "Supabase account"
-        }
-      },
       "disabled": true
     },
     {
@@ -458,14 +452,14 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        464,
-        608
+        1248,
+        1248
       ],
-      "id": "7079c022-19b9-4069-82ed-2d20970557df",
+      "id": "084672c7-a569-4a65-8edd-221cd3f57e24",
       "name": "GET Unprocessed IDS From Buffer",
       "credentials": {
         "supabaseApi": {
-          "id": "DlFWNGz93OouRE3S",
+          "id": "MjZAsSWQ2WPHhvC7",
           "name": "Supabase account"
         }
       }
@@ -481,26 +475,26 @@
         "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
         "queryParametersJson": "{}"
       },
-      "id": "1ef3c307-f239-4f8e-a5f5-2ee880a136b2",
+      "id": "a650d24f-18d3-461f-8c41-66320cccf2af",
       "name": "Insert Error Buffer Record: Pending",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        1712,
-        2288
+        1056,
+        3280
       ],
       "disabled": true,
       "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
     },
     {
       "parameters": {
-        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/documents",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
             }
           ]
         },
@@ -509,10 +503,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1024,
-        832
+        1648,
+        1472
       ],
-      "id": "4f25b51b-b189-49aa-9505-692acba3de83",
+      "id": "695de7c2-7c2d-467c-9c47-728cf9662d72",
       "name": "GET Document List RAGFlow",
       "alwaysOutputData": true,
       "retryOnFail": true,
@@ -526,7 +520,7 @@
             {
               "id": "a2b54888-a471-4979-b599-131954118c5a",
               "name": "NOI-RAGFlow-dataset-ID",
-              "value": "bddb8cda998711f094870242ac120006",
+              "value": "dc8d13caa2d211f0921e36bf8e6cac5d",
               "type": "string"
             },
             {
@@ -544,13 +538,13 @@
             {
               "id": "432c5424-48c2-4672-9928-3538606906bd",
               "name": "RAGFLOW-API-KEY",
-              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj",
               "type": "string"
             },
             {
               "id": "023f7d26-d93c-4e3e-aac4-b568601929f8",
               "name": "NGROK-TOKEN",
-              "value": "33CuVlZm2WWXBMBSDIlA0NWKuWd_iKwbvtk5K7py1x621UBd",
+              "value": "33Cu39rtAk1b4phB3kta8zGYtqk_MxCtZT8CK4A7q1LnKGbY",
               "type": "string"
             },
             {
@@ -572,10 +566,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        816,
-        1072
+        1488,
+        1664
       ],
-      "id": "bd189219-ee4f-4478-acc8-6f75f6eeba39",
+      "id": "bb25003b-f788-44f7-9d5c-755ace3ed9f5",
       "name": "ENV_VARIABLES"
     },
     {
@@ -587,43 +581,43 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -768,
-        528
+        16,
+        1168
       ],
       "typeVersion": 1,
-      "id": "24f84cdb-4503-4adc-8875-63d7a53a0099",
+      "id": "ac57019e-6b0a-4f7c-84b6-c26f620901c8",
       "name": "Sticky Note"
     },
     {
       "parameters": {
         "content": "## OCR system database connection",
-        "height": 1600,
-        "width": 4352,
+        "height": 2016,
+        "width": 5888,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        752,
-        528
+        2112,
+        1168
       ],
       "typeVersion": 1,
-      "id": "a4691761-15ae-4c74-bc5d-56a39ee92895",
+      "id": "49bb3465-d2cb-4848-9b31-6a781c08c1ee",
       "name": "Sticky Note1"
     },
     {
       "parameters": {
         "content": "## Document upload error logging and handling",
         "height": 304,
-        "width": 1648,
+        "width": 1104,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        752,
-        2208
+        688,
+        3200
       ],
       "typeVersion": 1,
-      "id": "3725db8c-9454-4332-a269-c4d9bc16e39a",
+      "id": "e4fcfa9e-32de-4646-b09a-f08713ef4934",
       "name": "Sticky Note2"
     },
     {
@@ -635,11 +629,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        5136,
-        528
+        8416,
+        1104
       ],
       "typeVersion": 1,
-      "id": "81d9e0bf-6022-40c2-b03d-6796ff0821d8",
+      "id": "615d055f-eeb0-4c21-a33a-80ba5187512f",
       "name": "Sticky Note3"
     },
     {
@@ -671,10 +665,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -208,
-        784
+        576,
+        1424
       ],
-      "id": "54626e6f-668a-4d85-9b5d-8b2511d781e4",
+      "id": "3533257b-10ca-43e8-83a6-8676ab13a235",
       "name": "Upload to Supabase",
       "retryOnFail": true,
       "maxTries": 5,
@@ -704,17 +698,11 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4944,
-        720
+        8208,
+        1248
       ],
-      "id": "964eef2b-690c-43a9-b4c9-05948634f837",
+      "id": "4a2e7fae-dd09-4bd5-b490-efe003a05688",
       "name": "GET Unprocessed IDS From Buffer_A",
-      "credentials": {
-        "supabaseApi": {
-          "id": "DlFWNGz93OouRE3S",
-          "name": "Supabase account"
-        }
-      },
       "disabled": true
     },
     {
@@ -746,66 +734,17 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1024,
-        608
+        1648,
+        1248
       ],
-      "id": "bc51b199-70b8-4b04-a204-51dea22e87c2",
+      "id": "b9d4a55d-50b9-41e4-8c81-f93f22896250",
       "name": "GET UnUploaded IDS From Buffer_A",
       "credentials": {
         "supabaseApi": {
-          "id": "DlFWNGz93OouRE3S",
+          "id": "MjZAsSWQ2WPHhvC7",
           "name": "Supabase account"
         }
       }
-    },
-    {
-      "parameters": {
-        "mode": "runOnceForEachItem",
-        "language": "python",
-        "pythonCode": "data = dict(_input.item.json.data)\ndocument_list = data.get(\"docs\", [])\n\nragflow_doc_ids = {\n    \"doc_id\": [],\n    \"pross_status\": [],\n    \"file_name\": [],\n    \"processed_at\": []\n}\n\nfor java_doc in document_list:\n  py_doc = java_doc.to_py()\n  ragflow_doc_ids[\"doc_id\"].append(py_doc.get(\"id\"))\n  ragflow_doc_ids[\"pross_status\"].append(py_doc.get(\"run\"))\n  ragflow_doc_ids[\"file_name\"].append(py_doc.get(\"name\"))\n  ragflow_doc_ids[\"processed_at\"].append(py_doc.get(\"process_begin_at\"))\n\nreturn {\"rag_docs\":ragflow_doc_ids }\n\n\n\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1248,
-        832
-      ],
-      "id": "0321ce3a-8793-4f17-bd31-f3abe5a96d90",
-      "name": "PARSER RGFlow Doc List",
-      "alwaysOutputData": true,
-      "retryOnFail": true,
-      "maxTries": 5,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  supa_data = dict(input_data).get(\"supa_docs\", {})\n  #supa_data = dict(_input.item.json).get(\"supabase_docs\", []) # lista de docs desde Supabase\n  ragflow_data = dict(input_data).get(\"rag_docs\", {}) # dict desde RAGFlow\n\n  #ragflow_data = dict(_input.item.json.rag_docs) \nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n\n# Función para procesar la entrada de n8n\ndef process_data(input_data) -> List[Dict[str, Any]]:\n    \n    # --- 1. Extraer y normalizar datos de entrada de manera robusta ---\n    supa_data: List[Dict[str, Any]] = dict(input_data).get(\"supa_docs\", {})\n    ragflow_raw_data: Dict[str, Any] = dict(input_data).get(\"rag_docs\", {})\n    data_bases = [supa_data, ragflow_raw_data] \n\n    # Si falta información crítica, retornar el error\n    if not supa_data or not ragflow_raw_data:\n        # Este mensaje es más preciso ahora\n        error_msg = \"Critical data missing. Expected 'supabase_docs' (list) and 'rag_docs' (dict) in input items.\"\n        raise [{\"json\": {\"error\": error_msg}}]\n        \n    # --- 2. Crear conjuntos para optimización ---\n    \n    # Crear un conjunto de nombres de archivos en RAGFlow para una búsqueda O(1)\n    ragflow_files: List = list(ragflow_raw_data.get(\"file_name\", []))\n    \n    # Crear un diccionario para mapear file_name a status en RAGFlow (opcional, para enriquecimiento)\n    ragflow_status_map: Dict[str, str] = {\n        name: status for name, status in zip(\n            ragflow_raw_data.get(\"file_name\", []), \n            ragflow_raw_data.get(\"pross_status\", [])\n        )\n    }\n\n    # Ragflow data ids\n    ragflow_id_map: Dict[str, str] = {\n        name: id for name, id in zip(\n            ragflow_raw_data.get(\"file_name\", []), \n            ragflow_raw_data.get(\"doc_id\", [])\n        )\n    }\n\n  # Results dictionary initialization\n    to_upload: List[Dict[str, Any]] = []\n    to_supabase_check: List[Dict[str, Any]] = []\n    to_ragflow_check: List[Dict[str, Any]] = []\n\n    # --- 3. Iterar y determinar el estado de cada documento (misma lógica) ---\n    for doc_json in supa_data:\n        doc = doc_json.get(\"json\")\n      \n        if doc:\n          pass\n        else:\n          raise \"Supabase data has no 'JSON' attributes, empty data.\"\n          \n        file_name = doc.get(\"file_name\", \"UNKNOWN_FILE\")\n        file_ragflow_id = doc.get(\"ragflow_id\", \"UNKNOWN_ID_CORRUPTED_DATA\")\n\n        # El documento esta siendo subido simultaneamente por ragflow y otra fuente, no hay registro en buffer pero si se encuentra en ragfloe\n        is_name_in_ragflow = file_name in list(ragflow_status_map.keys())\n        is_already_in_ragflow = (\n          doc.get(\"ragflow_id\") not in (\"NULL\", None) and\n          doc.get(\"ragflow_id\") in list(ragflow_id_map.values())\n        )\n\n        is_already_in_ragflow_but_not_supabased = (\n          doc.get(\"ragflow_id\") not in (\"NULL\", None) and\n          doc.get(\"ragflow_id\") in list(ragflow_id_map.values())\n        )\n\n        # Verificar duplicidad en RAGFlow\n        is_duplicate_in_ragflow = file_name in ragflow_files\n      \n        # Validar campos críticos de Supabase\n        is_ready_for_upload = (\n            doc.get(\"id\") is not None and\n            doc.get(\"supabase_key\") is not None and\n            doc.get(\"up_status\") == \"uploaded\" and\n            doc.get(\"up_ragflow_status\") == \"pending\" and\n            doc.get(\"pross_status\") == \"pending\" and \n            is_name_in_ragflow == False and\n            is_already_in_ragflow_but_not_supabased == False\n        )\n\n        # --- 4. Generar el item de salida para n8n ---\n        if not is_ready_for_upload:\n            status = \"unhandled_supabase_status\"\n        elif is_duplicate_in_ragflow or is_name_in_ragflow:\n            status = \"duplicate_in_ragflow\"\n        else:\n            status = \"ready_for_ragflow_upload\"\n\n        element = {\n            \"json\": {\n                \"file_name\": file_name,\n                \"supabase_id\": doc.get(\"id\"),\n                \"processing_status\": status,\n                \"ragflow_doc_status\": ragflow_status_map.get(file_name, \"N/A\"),\n                \"original_data\": doc\n            }\n        }\n\n        if status ==  \"unhandled_supabase_status\":\n            to_supabase_check.append(element)\n        elif status ==  \"duplicate_in_ragflow\":\n            to_ragflow_check.append(element)\n        else:\n            to_upload.append(element)\n\n    results = {\n      \"to_upload\": to_upload, \n      \"to_supabase_check\": to_supabase_check,\n      \"to_ragflow_check\": to_ragflow_check\n    }\n        \n    return results\n\n# El retorno envuelto en 'to_upload' es correcto para forzar una única salida.\nreturn process_data(input_data)"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2320,
-        848
-      ],
-      "id": "ab73dc1e-efc8-4522-a029-2a9cb52f92b6",
-      "name": "Detect if Doc is Present in RAGFlow",
-      "executeOnce": false,
-      "alwaysOutputData": true,
-      "retryOnFail": true,
-      "maxTries": 5,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        1696,
-        848
-      ],
-      "id": "475e2173-531f-4ee6-8cb9-0c0f96f5959f",
-      "name": "Merge"
     },
     {
       "parameters": {
@@ -815,10 +754,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1680,
-        1616
+        2864,
+        3920
       ],
-      "id": "45a84f79-97c7-4033-972e-abe222ba59f4",
+      "id": "f2c4d1ce-735f-4474-b184-97272d8e27b9",
       "name": "PARSE Fetch Errors Supabase",
       "retryOnFail": true,
       "alwaysOutputData": true,
@@ -833,32 +772,12 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1216,
-        1552
+        2400,
+        3856
       ],
       "typeVersion": 1,
-      "id": "eb348fb2-7310-413a-b23b-eb8b4b23bb57",
+      "id": "83392752-66da-496f-a9cc-98d6b3898c55",
       "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn {\"supa_docs\":_input.all()}  "
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1232,
-        608
-      ],
-      "id": "666eac13-894d-4345-9db4-aadca92b49d0",
-      "name": "PARSE to One Dict Supabase Results",
-      "retryOnFail": true,
-      "maxTries": 5,
-      "alwaysOutputData": true,
-      "notesInFlow": false,
-      "executeOnce": false,
-      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -868,31 +787,13 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1680,
-        1808
+        2864,
+        4112
       ],
-      "id": "d62c86f6-3a53-4cbc-bcd0-0394f44f4250",
+      "id": "eb2d8d5a-3dfe-4a60-8368-80190e90b99d",
       "name": "PARSE Fetch Errors Supabase1",
       "retryOnFail": true,
       "alwaysOutputData": true,
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2544,
-        1344
-      ],
-      "id": "e40e34c9-a488-4152-9dae-8e4afebbebd2",
-      "name": "PARSE Fetch Errors Sup-Rag comp",
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "disabled": true,
       "onError": "continueRegularOutput"
     },
     {
@@ -902,10 +803,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1888,
-        1616
+        3072,
+        3920
       ],
-      "id": "7e47b09f-6328-46ad-972e-22ca9cb34720",
+      "id": "8d9771f4-ed4b-41a4-bf7e-d9969c0ed0ff",
       "name": "Almacenar errores",
       "disabled": true
     },
@@ -916,10 +817,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1888,
-        1808
+        3072,
+        4112
       ],
-      "id": "8f823dc4-3b13-43a3-8da9-d0b01bf90ed7",
+      "id": "af40cff7-5c2f-4c1a-9fad-2b9189742068",
       "name": "Almacenar errores1",
       "disabled": true
     },
@@ -931,10 +832,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2736,
-        1632
+        3920,
+        3936
       ],
-      "id": "5f3c86d9-0e0a-4902-86c8-ec96d2191696",
+      "id": "7fe0d55a-737d-4721-9e9d-8ccf14e558e3",
       "name": "Trigger Mecanismo de Reparacion",
       "disabled": true
     },
@@ -943,10 +844,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2096,
-        1712
+        3280,
+        4016
       ],
-      "id": "6e99a98c-7ea1-4f35-84e2-8a794c81a470",
+      "id": "6f33fd61-600b-4924-a889-133fe095d168",
       "name": "Merge1",
       "disabled": true
     },
@@ -958,10 +859,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2304,
-        1712
+        3488,
+        4016
       ],
-      "id": "d8da6a85-c53e-4bd7-acca-477b30612e18",
+      "id": "1b19c359-6cbf-41ce-983a-717197c029bd",
       "name": "parse Errores",
       "disabled": true
     },
@@ -970,10 +871,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2528,
-        1632
+        3712,
+        3936
       ],
-      "id": "9b7d85db-0167-4202-9fae-fa9b675d38ec",
+      "id": "78f1fe7b-a594-421e-9447-9e507639dbf7",
       "name": "Merge2",
       "disabled": true
     },
@@ -984,28 +885,12 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1904,
-        848
+        3200,
+        1312
       ],
-      "id": "cbd60395-ec08-4e40-9a7f-bbaf6c34d6f2",
+      "id": "230648a5-f24a-41e1-a44d-275552c7b99b",
       "name": "Wait",
       "webhookId": "dad3a147-cff4-4b68-bb38-50b5ea67d83c"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# Lista para almacenar los items de salida formateados\ntry:\n    input_data = _input.all()[0].get(\"json\", {})\nexcept IndexError:\n    return [{\"json\": {\"error\": \"Invalid input structure: Input list is empty.\"}}]\nexcept Exception as e:\n    return [{\"json\": {\"error\": f\"Error, inccorrect data structura: {str(e)}\"}}]\n  \nREQUIRED_KEYS_BY_POSITION = [\n    \"supa_docs\",  # Esperado en _input.all()[0]\n    \"rag_docs\"    # Esperado en _input.all()[1]\n]\n\n# Lista para almacenar las claves que faltan\nmissing_keys: List[str] = []\n\ntry:\n    input_data = _input.all()\n    \n    # 1. Validación de la cantidad de ítems\n    if len(input_data) != len(REQUIRED_KEYS_BY_POSITION):\n        error_msg = f\"Merge output is malformed. Expected {len(REQUIRED_KEYS_BY_POSITION)} items, but got {len(input_data)}.\"\n        raise IndexError(error_msg)\n\n    # 2. Iterar sobre los ítems (posiciones 0 y 1) y validar su contenido\n    for i, key in enumerate(REQUIRED_KEYS_BY_POSITION):\n        \n        # Acceso robusto al JSON del ítem en la posición 'i'\n        item_json: Dict[str, Any] = input_data[i].get(\"json\", {})\n        \n        # Intentamos obtener el valor de la clave específica (ej., 'supa_docs')\n        data = item_json.get(key)\n        \n        # Validación de existencia: revisa si la data no existe O si existe pero está vacía\n        if data is None or (isinstance(data, (list, dict)) and not data):\n            missing_keys.append(key)\n            \n    # 3. Generar el error si faltan claves\n    if missing_keys:\n        error_message = f\"One of the needed data bases data leaking: {', '.join(missing_keys)}. Trigger compensation mechanism.\"\n        raise ValueError(error_message)\n\n    # 4. Si la validación es exitosa, fusionamos los dos ítems en uno solo \n    # para simplificar el flujo en el siguiente nodo 'Detect if Document...'\n    \n    final_output = {\n        REQUIRED_KEYS_BY_POSITION[0]: input_data[0].get(\"json\", {}).get(REQUIRED_KEYS_BY_POSITION[0]),\n        REQUIRED_KEYS_BY_POSITION[1]: input_data[1].get(\"json\", {}).get(REQUIRED_KEYS_BY_POSITION[1])\n    }\n    \n    # Retornamos un único ítem con toda la data fusionada para el siguiente nodo\n    return [{\"json\": final_output}]\n\nexcept Exception as e:\n    # Captura y relanza el error para que n8n lo redirija al error output\n    raise e"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2112,
-        848
-      ],
-      "id": "95834f05-1f19-4fcf-839f-4f9156a2248b",
-      "name": "Seek Data Leak",
-      "alwaysOutputData": true,
-      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1016,11 +901,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -768,
-        -64
+        0,
+        576
       ],
       "typeVersion": 1,
-      "id": "4d80a99f-96a3-43bf-b7bc-a5d3cc62f681",
+      "id": "ece87ca0-1ee2-4e1a-9578-cb7fb9397a89",
       "name": "Sticky Note5"
     },
     {
@@ -1046,17 +931,11 @@
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -688,
-        160
+        80,
+        800
       ],
-      "id": "6af77aa9-96f1-4d15-9eac-f064c19ea780",
+      "id": "defb736f-f6ef-468c-bb28-ae66f83b0e41",
       "name": "Google Drive Trigger1",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "jS1NhIXrB8G5MoEG",
-          "name": "Unnamed credential"
-        }
-      },
       "disabled": true
     },
     {
@@ -1072,17 +951,11 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -464,
-        160
+        304,
+        800
       ],
-      "id": "b95e7453-2b56-4905-b7c3-401ccee986c9",
+      "id": "99cc6c63-f081-4699-8f20-8253fad4fecf",
       "name": "Download file1",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "jS1NhIXrB8G5MoEG",
-          "name": "Unnamed credential"
-        }
-      },
       "disabled": true
     },
     {
@@ -1193,10 +1066,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -16,
-        128
+        752,
+        768
       ],
-      "id": "9c649c50-daff-411d-a6e3-1b66baf5ad1e",
+      "id": "53f1e259-b0ac-4659-acaa-c8003fc42ae2",
       "name": "Upload to buffer switch1",
       "disabled": true
     },
@@ -1211,13 +1084,13 @@
         "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
         "queryParametersJson": "{}"
       },
-      "id": "f50920cd-0329-4c73-b71c-dbc1bae00f19",
+      "id": "0aaced8e-804b-4722-a184-73f4ea4d318a",
       "name": "Insert Buffer Record: Upload1",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        208,
-        -16
+        976,
+        624
       ],
       "disabled": true,
       "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
@@ -1246,17 +1119,11 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        432,
-        -16
+        1200,
+        624
       ],
-      "id": "6e378839-bf0d-4097-adcb-f82844451362",
+      "id": "fd102f71-b3f6-423c-b882-0502f34fa8df",
       "name": "GET Unprocessed IDS From Buffer1",
-      "credentials": {
-        "supabaseApi": {
-          "id": "DlFWNGz93OouRE3S",
-          "name": "Supabase account"
-        }
-      },
       "disabled": true
     },
     {
@@ -1288,10 +1155,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -240,
-        160
+        528,
+        800
       ],
-      "id": "810f8bf9-0bc6-43df-aff6-777f73f928f4",
+      "id": "eabf7295-b05d-440c-b2cb-83369077ddcf",
       "name": "Upload to Supabase1",
       "retryOnFail": true,
       "maxTries": 5,
@@ -1306,11 +1173,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        5152,
-        1120
+        8432,
+        1696
       ],
       "typeVersion": 1,
-      "id": "53aa6fb4-6f08-4706-a2b8-c1ae62c170b9",
+      "id": "d8f3f842-ea5d-4cda-8cbb-2d17db90549d",
       "name": "Sticky Note6"
     },
     {
@@ -1322,11 +1189,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        6848,
-        528
+        10128,
+        1104
       ],
       "typeVersion": 1,
-      "id": "a6940fb9-9222-4a57-87a8-e01c7e7de7d6",
+      "id": "c8ecad5f-92cf-4f45-a075-343fe66c10b7",
       "name": "Sticky Note7"
     },
     {
@@ -1338,11 +1205,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        6848,
-        1120
+        10128,
+        1696
       ],
       "typeVersion": 1,
-      "id": "9e38ac70-7915-435a-8a3f-ee7ba86eb8cb",
+      "id": "259e3969-9b74-4c04-8219-356950f64b38",
       "name": "Sticky Note8"
     },
     {
@@ -1354,11 +1221,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -768,
-        -640
+        0,
+        0
       ],
       "typeVersion": 1,
-      "id": "7a88aa40-a5ad-4927-95d9-9ac25a11fb05",
+      "id": "9a95b549-6c47-478d-8dda-320730b29c24",
       "name": "Sticky Note9"
     },
     {
@@ -1384,17 +1251,11 @@
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -688,
-        -416
+        80,
+        224
       ],
-      "id": "b12e7eee-afd3-4e35-9b98-855596f7862f",
+      "id": "0ac32f80-ffde-494e-903f-0c1852cdbbb6",
       "name": "Google Drive Trigger2",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "jS1NhIXrB8G5MoEG",
-          "name": "Unnamed credential"
-        }
-      },
       "disabled": true
     },
     {
@@ -1410,17 +1271,11 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -464,
-        -416
+        304,
+        224
       ],
-      "id": "55081c31-aaf8-4022-bdf2-3ccb3006b04e",
+      "id": "08a0dfa4-34db-4d7d-9f51-90422c0ce0b0",
       "name": "Download file2",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "jS1NhIXrB8G5MoEG",
-          "name": "Unnamed credential"
-        }
-      },
       "disabled": true
     },
     {
@@ -1531,10 +1386,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -16,
-        -448
+        752,
+        192
       ],
-      "id": "ddbe5aa2-af1a-4b6f-9bae-44985760c15e",
+      "id": "8d4d5bcc-0fab-4015-8135-82d100225c54",
       "name": "Upload to buffer switch2",
       "disabled": true
     },
@@ -1549,13 +1404,13 @@
         "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
         "queryParametersJson": "{}"
       },
-      "id": "ae0c580c-4deb-46ac-bac0-c738017d16c7",
+      "id": "b3688465-7b4f-4764-af16-ed51c990952d",
       "name": "Insert Buffer Record: Upload2",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        208,
-        -592
+        976,
+        48
       ],
       "disabled": true,
       "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
@@ -1584,17 +1439,11 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        432,
-        -592
+        1200,
+        48
       ],
-      "id": "56736491-71cd-4a19-bda2-694f9f0d014b",
+      "id": "80c527d0-d597-49a4-84d5-eb75b7caefc5",
       "name": "GET Unprocessed IDS From Buffer2",
-      "credentials": {
-        "supabaseApi": {
-          "id": "DlFWNGz93OouRE3S",
-          "name": "Supabase account"
-        }
-      },
       "disabled": true
     },
     {
@@ -1626,158 +1475,15 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -240,
-        -416
+        528,
+        224
       ],
-      "id": "239613c2-7506-4864-affa-19c3ffffee71",
+      "id": "460bcb68-b64e-40b1-b5bd-1eefdc309eea",
       "name": "Upload to Supabase2",
       "retryOnFail": true,
       "maxTries": 5,
       "disabled": true,
       "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.to_upload }}",
-                    "rightValue": 0,
-                    "operator": {
-                      "type": "array",
-                      "operation": "lengthGt",
-                      "rightType": "number"
-                    },
-                    "id": "6f2c5f88-ab63-4821-86bd-45f88befcb8f"
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "files_to_upload"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "69762c4a-8b35-41dd-b952-d869e5ff59b3",
-                    "leftValue": "={{ $json.to_supabase_check }}",
-                    "rightValue": 0,
-                    "operator": {
-                      "type": "array",
-                      "operation": "lengthEquals",
-                      "rightType": "number"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "files_to_check_supabase"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "7d87f52f-773c-4b7c-9917-d26a26b15af1",
-                    "leftValue": "={{ $json.to_ragflow_check }}",
-                    "rightValue": 0,
-                    "operator": {
-                      "type": "array",
-                      "operation": "lengthEquals",
-                      "rightType": "number"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "files_to_check_ragflow"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.3,
-      "position": [
-        2544,
-        832
-      ],
-      "id": "c3780df1-0b11-43a5-b6cb-bf2405eaa31b",
-      "name": "DB Storage Synch Router"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  return input_data.get(\"to_upload\", [])\nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2912,
-        672
-      ],
-      "id": "28ca3dd9-4105-46b7-a1d0-a2993a17e6c9",
-      "name": "PARSER To RAGFlow Upload",
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  return input_data.get(\"to_supabase_check\", [])\nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2912,
-        848
-      ],
-      "id": "da9df285-ee54-497d-8d52-c7c0feb7001b",
-      "name": "PARSER To Supabase Check",
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  return input_data.get(\"to_ragflow_check\", [])\nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2912,
-        1040
-      ],
-      "id": "7d7bc121-224c-45b7-b4c8-916eb3b6ab4b",
-      "name": "PARSER To RAGFlow Check",
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1806,10 +1512,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3136,
-        672
+        5504,
+        1328
       ],
-      "id": "60eb1baa-a235-42bb-90ef-5efb647d02b0",
+      "id": "e9aa4f35-ea91-42db-9b9a-71b1cf86397a",
       "name": "GET Documents from Suapabase",
       "retryOnFail": true,
       "maxTries": 5,
@@ -1817,27 +1523,14 @@
     },
     {
       "parameters": {
-        "numberInputs": 3
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        3328,
-        1360
-      ],
-      "id": "a5279ec8-c1c5-4055-aa70-9fef0ab320c1",
-      "name": "Merge Error Catcher PARSER"
-    },
-    {
-      "parameters": {
         "method": "POST",
-        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/documents",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
             },
             {
               "name": "Content-Type",
@@ -1861,10 +1554,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3360,
-        672
+        5744,
+        1328
       ],
-      "id": "803b78a1-a96c-452e-96b6-4dfa3476d457",
+      "id": "b1812d5d-b355-40b5-ba77-9fe2e5702dc6",
       "name": "POST Upload Docs to RAGFlow",
       "alwaysOutputData": true,
       "retryOnFail": true,
@@ -1873,27 +1566,14 @@
     },
     {
       "parameters": {
-        "numberInputs": 5
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        4416,
-        1328
-      ],
-      "id": "846c3aee-6c25-4eb5-9a69-904f7f65a2c4",
-      "name": "Merge Error Catcher PARSER1"
-    },
-    {
-      "parameters": {
         "method": "POST",
-        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/chunks",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/chunks",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
             },
             {
               "name": "Content-Type",
@@ -1906,7 +1586,7 @@
           "parameters": [
             {
               "name": "document_ids",
-              "value": "={{ $json.docs_to_process }}"
+              "value": "={{ $json.document_ids }}"
             }
           ]
         },
@@ -1915,10 +1595,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4096,
-        672
+        7216,
+        1648
       ],
-      "id": "b4ee68d0-374f-4230-9c65-3a00cfa6c509",
+      "id": "4155e90a-589c-49ed-b0fa-2568ab6efb43",
       "name": "POST Activate RAGFlow",
       "alwaysOutputData": true,
       "executeOnce": false,
@@ -1934,10 +1614,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1408,
-        1616
+        2592,
+        3920
       ],
-      "id": "598a5132-5905-491b-b5d4-98a262d778b7",
+      "id": "de3f81bb-5207-4a0b-a5f6-2d62f1148b73",
       "name": "Catch Bad RAGFlow calling",
       "retryOnFail": true,
       "alwaysOutputData": true,
@@ -1946,37 +1626,1001 @@
     },
     {
       "parameters": {
-        "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# Lista para almacenar los IDs de RAGFlow extraídos\nragflow_ids: List[str] = []\n\ntry:\n    docs_to_process = _input.all()\n    if not docs_to_process:\n        raise IndexError(\"Input list is empty.\")\n        \n    for item in docs_to_process:\n\n        item_data = item.get(\"json\", {})\n        is_activated = item_data.get(\"activation_required\", False)\n        doc_id = item_data.get(\"ragflow_id\")\n      \n        if is_activated and doc_id:\n            ragflow_ids.append(doc_id)\n            \n    return [{\n        \"json\": {\n            \"docs_to_process\": ragflow_ids\n        }\n    }]\n\nexcept IndexError:\n    return [{\n        \"json\": {\n            \"error\": \"Input data is empty. No documents were passed to parse IDs.\",\n            \"docs_to_process\": []\n        }\n    }]\n\nexcept Exception as e:\n    return [{\n        \"json\": {\n            \"error\": f\"Error during RAGFlow ID aggregation loop: {str(e)}\",\n            \"docs_to_process\": []\n        }\n    }]"
+        "height": 640,
+        "width": 624
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.stickyNote",
       "position": [
-        3856,
-        672
+        1456,
+        1168
       ],
-      "id": "0ad14b77-a54c-40dc-8f53-94eb79e6a8fb",
-      "name": "PARSER Docs Ids",
-      "retryOnFail": true,
-      "alwaysOutputData": true,
-      "onError": "continueErrorOutput"
+      "typeVersion": 1,
+      "id": "bf937391-da4d-458f-85b3-95f35d6ff1dc",
+      "name": "Sticky Note10"
     },
     {
       "parameters": {
         "language": "python",
-        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# Lista para almacenar los items de salida formateados\ntry:\n    input_data = _input.all()[0].get(\"json\", {})\nexcept IndexError:\n    return [{\"json\": {\"error\": \"Invalid input structure: Input list is empty.\"}}]\nexcept Exception as e:\n    return [{\"json\": {\"error\": f\"Error, inccorrect data structura: {str(e)}\"}}]\n\ndocs_to_process = []\ninput_data = _input.all()[0].get(\"json\", {}).get(\"data\",{})\n\nfor item in input_data:\n    try:\n        ragflow_response: Dict[str, Any] = item.to_py()\n        ragflow_id = ragflow_response.get(\"doc_id\") or ragflow_response.get(\"id\")\n        doc_name = ragflow_response.get(\"name\") or item.get(\"json\", {}).get(\"file_name\") \n        initial_state = ragflow_response.get(\"run\") or ragflow_response.get(\"status\")\n        \n        if ragflow_id and doc_name and initial_state:\n\n            docs_to_process.append({\n  \n                \"json\": {\n                    \"ragflow_id\": ragflow_id,\n                    \"file_name\": doc_name,\n                    \"activation_required\": True \n                }\n            })\n            \n        else:\n\n            docs_to_process.append({\n                \"json\": {\n                    \"error\": \"Missing critical IDs from RAGFlow response.\",\n                    \"response_data\": ragflow_response,\n                    \"file_name\": doc_name,\n                    \"activation_required\": False\n                }\n            })\n\n    except Exception as e:\n    \n        docs_to_process.append({\n            \"json\": {\n                \"error\": f\"Error during parsing RAGFlow response: {str(e)}\",\n                \"file_name\": item.get(\"json\", {}).get(\"file_name\", \"UNKNOWN\"),\n                \"activation_required\": False\n            }\n        })\n\nreturn docs_to_process\n"
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3600,
-        672
+        2592,
+        4432
       ],
-      "id": "8282a9cc-6f79-4f8b-9f01-65d0339aec3b",
-      "name": "PARSER Docs to Process",
+      "id": "31ac5590-0d9c-43e1-8a2b-05a1475ff00c",
+      "name": "Catch Bad RAGFlow calling1",
       "retryOnFail": true,
       "alwaysOutputData": true,
-      "onError": "continueErrorOutput"
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## API KEY-related bad connections and errors",
+        "height": 336,
+        "width": 1904,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2400,
+        4336
+      ],
+      "typeVersion": 1,
+      "id": "55c01b1d-cb37-4aed-897c-78c9eb4e38f4",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13d9d854-0c34-458e-97ff-555c268ff998",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GOOD API"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f65bc15c-360b-4aa9-95c7-755f428f025d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NO Dataset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c9fc25-dbb1-4fef-acbe-f728f58df058",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "Authentication error: API key is invalid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BAD API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1872,
+        1440
+      ],
+      "id": "bad7013d-ed21-41c6-a713-9f0fbc4d2447",
+      "name": "API Badcall Ragflow Router"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2400,
+        1424
+      ],
+      "id": "b481c857-3750-4a3f-844c-306a7484042e",
+      "name": "Split RAGFlow Docs"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        1424
+      ],
+      "id": "42d71209-959c-48bb-bd4e-4f5082822523",
+      "name": "SPLIT Ragflow Docs"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        1552
+      ],
+      "id": "bf1ee298-83dc-4bc8-bc44-d9f3dac97c70",
+      "name": "PARSE RAGFlow Docs",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"supa_docs\": {{ $json }}\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2144,
+        1248
+      ],
+      "id": "2dc8dd84-d88a-4e19-ac99-2f4d510ed43b",
+      "name": "PARSE Docs in Supabase",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3024,
+        1312
+      ],
+      "id": "f8a053d8-6957-40dc-9e31-6d9c722018ca",
+      "name": "MERGE Doc Queries"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "ragflow_docs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        1424
+      ],
+      "id": "96b509ba-f7ba-4f1e-aa49-df3db55c2362",
+      "name": "Aggregate: RAGFlow"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "supa_docs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        1248
+      ],
+      "id": "c79f073d-3232-46d7-b00e-55eefb968560",
+      "name": "Aggregate: Supabase"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.supa_docs }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "1026f38e-d93b-482f-97fe-7ab1778e0179"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Supa_exists"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "94dd2ede-5d80-4e17-bc8f-be8623ac3bb7",
+                    "leftValue": "={{ $json.ragflow_docs }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ragflow_exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        3392,
+        1312
+      ],
+      "id": "0a84faf8-10c6-4807-b99c-bf9263a0db53",
+      "name": "Switch DB Query Router"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "supa_docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3904,
+        1232
+      ],
+      "id": "fc45e402-78d0-4b3e-83ba-74f398c24e3a",
+      "name": "SPLIT Supa Docs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60353313-cf65-4eea-98ee-987e04863bdc",
+              "leftValue": "={{ $json.supa_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8a70551e-3113-4431-8484-75dc130f2924",
+              "leftValue": "={{ $json.supa_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3632,
+        1248
+      ],
+      "id": "3e18e541-f35d-4d26-8b42-66f8b6f8eb98",
+      "name": "Supa_Data_Checker"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60353313-cf65-4eea-98ee-987e04863bdc",
+              "leftValue": "={{ $json.ragflow_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "7c21460c-4786-4db1-a5ec-b8dbebe1db40",
+              "leftValue": "={{ $json.ragflow_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3632,
+        1408
+      ],
+      "id": "73b494f3-1c3f-42a4-827e-b6563dc33091",
+      "name": "Ragf_Data_Checker"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\",  \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"pross_status\": \"{{ $json.pross_status }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4496,
+        1328
+      ],
+      "id": "bd114569-2fdf-4ee3-902d-45e88a31ed88",
+      "name": "PARSE Supa Names",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "ragflow_docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3904,
+        1536
+      ],
+      "id": "aa096ba4-fd6c-4649-9d11-2517e159a573",
+      "name": "SPLIT Ragf Docs"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4112,
+        1536
+      ],
+      "id": "8bb3b75e-7aed-49f2-877f-590191625e63",
+      "name": "LOOP Parser"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4112,
+        1232
+      ],
+      "id": "a50f41c2-3693-4b8d-9bbb-95630d616fee",
+      "name": "LOOP Parser1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42c1fe3c-c1df-43f3-b23a-a98b8f268a39",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1e89d6e0-0a86-4bd2-897a-1cdf7e758b0a",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "e0ed85ee-1178-4cbb-aaa2-191a0e16742c",
+              "leftValue": "={{ $json.supabase_key }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c85a16ad-bd97-4023-a9b0-74982fb4b7c2",
+              "leftValue": "={{ $json.supabase_key }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "5d5df582-3c13-49a4-8ee5-bc3c1383766c",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e8a1c527-8d44-4768-bcab-3077a43eac90",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "c8372a9f-6135-4578-b748-65cb99e9bb9b",
+              "leftValue": "={{ $json.up_status }}",
+              "rightValue": "uploaded",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "78697473-d57c-401f-9ce1-528caae2de50",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "431e5e25-50c0-466f-944c-a6a3c649ff2c",
+              "leftValue": "={{ $json.up_ragflow_status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4272,
+        1328
+      ],
+      "id": "4b852b9c-b6a6-49d1-9621-7e99eb714c8b",
+      "name": "Existence Conditions  Supa"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42c1fe3c-c1df-43f3-b23a-a98b8f268a39",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1e89d6e0-0a86-4bd2-897a-1cdf7e758b0a",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "5d5df582-3c13-49a4-8ee5-bc3c1383766c",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e8a1c527-8d44-4768-bcab-3077a43eac90",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "c8372a9f-6135-4578-b748-65cb99e9bb9b",
+              "leftValue": "={{ $json.dataset_id }}",
+              "rightValue": "uploaded",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "81075e67-3b0a-4528-92d5-7567c99376b7",
+              "leftValue": "={{ $json.dataset_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4272,
+        1632
+      ],
+      "id": "dc278c3f-3997-4911-8814-e98758611d5b",
+      "name": "Existence Conditions  RAGF"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        5088,
+        1520
+      ],
+      "id": "740b986a-7845-450c-bbfb-37ca8c6cd453",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4880,
+        1520
+      ],
+      "id": "a642d6ae-821e-4b24-9d00-6d2dfdb9a3cb",
+      "name": "MERGE Doc Checker"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\",  \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"pross_status\": \"{{ $json.processed }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4496,
+        1632
+      ],
+      "id": "ac18f7f6-182b-4fc4-bdce-015d9e950c77",
+      "name": "PARSE Ragf Docs",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\",  \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"pross_status\": \"pending\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4880,
+        1744
+      ],
+      "id": "214f9f5b-aa3c-499f-bea8-808f94cec5ab",
+      "name": "PARSE Processing State",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf9b9d58-13af-4149-bd4f-433f39162ad0",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "=UNSTART",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4672,
+        1728
+      ],
+      "id": "123b7d0d-8bb4-4026-83de-9cd5941685e4",
+      "name": "Pross Status"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1d153ef4-d062-404f-b8c6-3953a1c4736b",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c61ebb44-3b69-43d6-8220-5065638da2a9",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5264,
+        1520
+      ],
+      "id": "70865b88-7d0a-4033-ae4a-a1b818dbe089",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"document_ids\": \"{{ $json.id }}\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6544,
+        1520
+      ],
+      "id": "f8fe5d75-f44b-4587-9639-edcae955d749",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        5984,
+        1328
+      ],
+      "id": "df3b15c4-ca0d-4f5d-9601-f42d46570ac8",
+      "name": "SPLIT Ragflow UploadedDocs"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        6224,
+        1328
+      ],
+      "id": "f953bdda-e53b-4a73-86a9-ed9a69d2b60e",
+      "name": "LOOP Parser2"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "document_ids"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6992,
+        1648
+      ],
+      "id": "0bb7dc73-b138-4ea8-9ad1-f99dab479e9f",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a0578834-7ba5-4d06-9e3b-a8366ca18237",
+              "leftValue": "={{ $json.run }}",
+              "rightValue": "UNSTART",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6384,
+        1440
+      ],
+      "id": "85deca2c-125f-4872-9091-b633e4e6dfd7",
+      "name": "If2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6800,
+        1648
+      ],
+      "id": "62debb3c-b7bb-4072-8e0b-0779d4d19174",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        5504,
+        1680
+      ],
+      "id": "2c75e28e-e89f-4e52-9da4-5f2af9e00bcf",
+      "name": "LOOP Parser3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"document_ids\": \"{{ $json.ragflow_id }}\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5904,
+        1776
+      ],
+      "id": "33b11279-23ae-49cc-accc-735f0ff3a973",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a0578834-7ba5-4d06-9e3b-a8366ca18237",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "de18bbe6-062d-434d-b7f7-2014065aada1",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "UNSTART",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5664,
+        1792
+      ],
+      "id": "6cd3872c-f1b3-4acf-a3fa-980b2fce0e04",
+      "name": "If3"
     }
   ],
   "pinData": {},
@@ -2166,11 +2810,6 @@
         ]
       ]
     },
-    "GET Unprocessed IDS From Buffer": {
-      "main": [
-        []
-      ]
-    },
     "Insert Error Buffer Record: Pending": {
       "main": [
         [
@@ -2186,7 +2825,7 @@
       "main": [
         [
           {
-            "node": "PARSER RGFlow Doc List",
+            "node": "API Badcall Ragflow Router",
             "type": "main",
             "index": 0
           }
@@ -2226,81 +2865,11 @@
       "main": [
         [
           {
-            "node": "PARSE to One Dict Supabase Results",
+            "node": "PARSE Docs in Supabase",
             "type": "main",
             "index": 0
           }
         ]
-      ]
-    },
-    "PARSER RGFlow Doc List": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "PARSE Fetch Errors Supabase1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Detect if Doc is Present in RAGFlow": {
-      "main": [
-        [
-          {
-            "node": "DB Storage Synch Router",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "PARSE Fetch Errors Sup-Rag comp",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "Wait",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "PARSE to One Dict Supabase Results": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "PARSE Fetch Errors Supabase",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "PARSE Fetch Errors Sup-Rag comp": {
-      "main": [
-        []
       ]
     },
     "PARSE Fetch Errors Supabase": {
@@ -2323,11 +2892,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Trigger Mecanismo de Reparacion": {
-      "main": [
-        []
       ]
     },
     "Almacenar errores": {
@@ -2389,25 +2953,7 @@
       "main": [
         [
           {
-            "node": "Seek Data Leak",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Seek Data Leak": {
-      "main": [
-        [
-          {
-            "node": "Detect if Doc is Present in RAGFlow",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Merge2",
+            "node": "Switch DB Query Router",
             "type": "main",
             "index": 0
           }
@@ -2524,7 +3070,339 @@
         ]
       ]
     },
-    "PARSER To RAGFlow Upload": {
+    "GET Documents from Suapabase": {
+      "main": [
+        [
+          {
+            "node": "POST Upload Docs to RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "POST Upload Docs to RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow UploadedDocs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "POST Activate RAGFlow": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "API Badcall Ragflow Router": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Catch Bad RAGFlow calling1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Catch Bad RAGFlow calling1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split RAGFlow Docs": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow Docs": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Docs in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE Doc Queries": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate: RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Queries",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Aggregate: Supabase": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Supa Docs": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch DB Query Router": {
+      "main": [
+        [
+          {
+            "node": "Supa_Data_Checker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ragf_Data_Checker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supa_Data_Checker": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Supa Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ragf_Data_Checker": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragf Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Supa Names": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragf Docs": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Checker",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Existence Conditions  RAGF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser1": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Checker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Existence Conditions  Supa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Existence Conditions  Supa": {
+      "main": [
+        [
+          {
+            "node": "PARSE Supa Names",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Existence Conditions  RAGF": {
+      "main": [
+        [
+          {
+            "node": "PARSE Ragf Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE Doc Checker": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Ragf Docs": {
+      "main": [
+        [
+          {
+            "node": "Pross Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pross Status": {
+      "main": [
+        [
+          {
+            "node": "PARSE Processing State",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LOOP Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Processing State": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
       "main": [
         [
           {
@@ -2535,121 +3413,116 @@
         ],
         [
           {
-            "node": "Merge Error Catcher PARSER",
+            "node": "LOOP Parser3",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "DB Storage Synch Router": {
+    "SPLIT Ragflow UploadedDocs": {
       "main": [
         [
           {
-            "node": "PARSER To RAGFlow Upload",
+            "node": "LOOP Parser2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "PARSER To Supabase Check",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "PARSER To RAGFlow Check",
+            "node": "If2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "GET Unprocessed IDS From Buffer_A": {
+    "Edit Fields": {
       "main": [
-        []
-      ]
-    },
-    "PARSER To RAGFlow Check": {
-      "main": [
-        [],
         [
           {
-            "node": "Merge Error Catcher PARSER",
+            "node": "LOOP Parser2",
             "type": "main",
-            "index": 2
+            "index": 0
           }
         ]
       ]
     },
-    "PARSER To Supabase Check": {
+    "If2": {
       "main": [
-        [],
         [
           {
-            "node": "Merge Error Catcher PARSER",
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
             "type": "main",
             "index": 1
           }
-        ]
-      ]
-    },
-    "GET Documents from Suapabase": {
-      "main": [
-        [
-          {
-            "node": "POST Upload Docs to RAGFlow",
-            "type": "main",
-            "index": 0
-          }
         ],
         [
           {
-            "node": "Merge Error Catcher PARSER1",
-            "type": "main",
-            "index": 4
-          }
-        ]
-      ]
-    },
-    "Merge Error Catcher PARSER1": {
-      "main": [
-        []
-      ]
-    },
-    "POST Upload Docs to RAGFlow": {
-      "main": [
-        [
-          {
-            "node": "PARSER Docs to Process",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Merge Error Catcher PARSER1",
-            "type": "main",
-            "index": 3
-          }
-        ]
-      ]
-    },
-    "POST Activate RAGFlow": {
-      "main": [
-        [],
-        [
-          {
-            "node": "Merge Error Catcher PARSER1",
+            "node": "If3",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "PARSER Docs Ids": {
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
       "main": [
         [
           {
@@ -2657,44 +3530,21 @@
             "type": "main",
             "index": 0
           }
-        ],
-        [
-          {
-            "node": "Merge Error Catcher PARSER1",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "PARSER Docs to Process": {
-      "main": [
-        [
-          {
-            "node": "PARSER Docs Ids",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Merge Error Catcher PARSER1",
-            "type": "main",
-            "index": 2
-          }
         ]
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1,
+    "availableInMCP": false
   },
-  "versionId": "d7828d0f-3b17-4659-a7eb-3bfbab115a1a",
+  "versionId": "144b3f21-45c3-49be-a023-3f273c9f208d",
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "237ecc72876c41bc604983a896799bf750dc6e2dda59ebce87a4871aab2b9f18"
+    "instanceId": "61f78869dc0b0a74cc393ddba302cbb1cc5ddbc8fa3d35afd61eb4be3ead72f1"
   },
-  "id": "vlN8kCgWJzoWifwC",
+  "id": "mpvVYaR2wGCO40xv",
   "tags": []
 }
