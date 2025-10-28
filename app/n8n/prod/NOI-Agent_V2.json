@@ -1,0 +1,2626 @@
+{
+  "name": "NOI-Agent_V2",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1iGshhzsCrRUe2RTMbYv3TgjmxtFJP85_",
+          "mode": "list",
+          "cachedResultName": "CRC_NOI_Agent",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1iGshhzsCrRUe2RTMbYv3TgjmxtFJP85_"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        112,
+        1424
+      ],
+      "id": "3b28e2d3-cda5-4fef-a132-b44e1a6db012",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6sU8QsrVmPgZUn7D",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        336,
+        1424
+      ],
+      "id": "58ba4183-402b-41e8-a16d-884fe4d38f73",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6sU8QsrVmPgZUn7D",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.29.192.1/api/v1/datasets/{{dataset_id}}/chunks",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file"
+            },
+            {
+              "name": "db_name",
+              "value": "NOI-N8N-test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6672,
+        1280
+      ],
+      "id": "57b29ee8-7347-446a-a576-49c7b73d7fb3",
+      "name": "Send to RAGFlow",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6016,
+        1504
+      ],
+      "id": "699f90d3-30e9-450b-9ccd-01c1810fcf8f",
+      "name": "GET IDs from Supabase",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6224,
+        1280
+      ],
+      "id": "a4c1b2b4-0990-4a26-9ca8-394dc4c890b2",
+      "name": "Compare Data Supabase_RGFlow",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6016,
+        1280
+      ],
+      "id": "8a48ae1b-4d18-416a-901d-596e112bbd97",
+      "name": "Determine Unprocessed Documents",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6448,
+        1280
+      ],
+      "id": "219951a2-f1ad-4e65-ae5b-2a5d318cf70c",
+      "name": "GET PDF from Supabase",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6896,
+        1280
+      ],
+      "id": "7dd8d11a-1898-4c48-b84b-98cd36fd5799",
+      "name": "Parse PDF keys to RAGFlow POST",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.29.192.1/api/v1/datasets/{{dataset_id}}/chunks",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file"
+            },
+            {
+              "name": "db_name",
+              "value": "NOI-N8N-test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        7120,
+        1280
+      ],
+      "id": "5fe57932-2435-4620-ba29-687c9ab8d5bd",
+      "name": "Activate RAGFlow pipeline",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$node[\"Download file\"].json[\"name\"]}}",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        }
+      },
+      "id": "875cb404-4240-46a1-becb-1f9fb3b6c000",
+      "name": "Update Supabase Buffer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        7344,
+        1280
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        784,
+        1392
+      ],
+      "id": "215ef3d9-90fb-41b2-98d5-2beefdfbf3fa",
+      "name": "Upload to buffer switch"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"pending\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "7224387e-dec9-4670-9703-c83af8542b8d",
+      "name": "Insert Buffer Record: Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        1248
+      ],
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"failed\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "a920bbdf-d60f-44ae-9fed-c3146eb66bba",
+      "name": "Insert Buffer Record: Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        2928
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6dc2557e-c284-4727-81b2-dcaaa9ef453e",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2704,
+        2928
+      ],
+      "id": "9db4443e-2862-436a-a874-a029477ef10e",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2928,
+        2944
+      ],
+      "id": "864cd8fa-13aa-4829-8f3f-0b4bd3946a35",
+      "name": "Update a row",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        1248
+      ],
+      "id": "9e37531c-8bfd-4667-99e8-6f52fa8c62f9",
+      "name": "GET Unprocessed IDS From Buffer",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer_errors",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"error\": \"{{$json.error.message}}\",\n  \"status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "91f9be70-5921-45be-a064-300493de80b0",
+      "name": "Insert Error Buffer Record: Pending",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        2928
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1792,
+        1472
+      ],
+      "id": "18c67c1a-2f5b-4e06-8a87-af2ace6d12f7",
+      "name": "GET Document List RAGFlow",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2b54888-a471-4979-b599-131954118c5a",
+              "name": "NOI-RAGFlow-dataset-ID",
+              "value": "bddb8cda998711f094870242ac120006",
+              "type": "string"
+            },
+            {
+              "id": "3b66e7b4-5f94-476c-9097-d9238813bde8",
+              "name": "RAGFLOW-SERVER-API-1",
+              "value": "172.29.192.1:9380",
+              "type": "string"
+            },
+            {
+              "id": "3246288f-3b2a-4fcc-b6fc-1edc6326c662",
+              "name": "SUPABASE-PDF-BUCKET-URL",
+              "value": "erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket",
+              "type": "string"
+            },
+            {
+              "id": "432c5424-48c2-4672-9928-3538606906bd",
+              "name": "RAGFLOW-API-KEY",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm",
+              "type": "string"
+            },
+            {
+              "id": "023f7d26-d93c-4e3e-aac4-b568601929f8",
+              "name": "NGROK-TOKEN",
+              "value": "33CuVlZm2WWXBMBSDIlA0NWKuWd_iKwbvtk5K7py1x621UBd",
+              "type": "string"
+            },
+            {
+              "id": "68526840-7592-46e6-9278-504dcdd2356f",
+              "name": "RAGFLOW-LOCAL-SERVER",
+              "value": "https://unsaltatory-tinisha-visionally.ngrok-free.dev ",
+              "type": "string"
+            },
+            {
+              "id": "66f39a3b-945a-4a24-a844-3dab72871c74",
+              "name": "NGROK-DEV-TOKEN",
+              "value": "33CuVlZm2WWXBMBSDIlA0NWKuWd_iKwbvtk5K7py1x621UBd",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        1712
+      ],
+      "id": "ce9a2270-ac85-4690-abbd-fee6922663de",
+      "name": "ENV_VARIABLES"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Google Drive):\n-document storage\n-metadata storage\n\n",
+        "height": 464,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "67134308-cee9-460f-9471-5f9193ebb93a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## OCR system database connection",
+        "height": 1600,
+        "width": 4352,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1520,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "af702db8-0361-4988-a160-61c2a4949c6f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Document upload error logging and handling",
+        "height": 304,
+        "width": 1648,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1520,
+        2848
+      ],
+      "typeVersion": 1,
+      "id": "dc8169de-821b-4caf-9b5a-53102bfa6990",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Document processing pipeline",
+        "height": 528,
+        "width": 1648,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5904,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "93f36a36-6de4-4bbd-8651-6d851e51735c",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        1424
+      ],
+      "id": "e532bb0b-9977-43bf-b9f4-cb774aa379b9",
+      "name": "Upload to Supabase",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5712,
+        1360
+      ],
+      "id": "0d7fa6e2-52c1-4d6d-9546-7d1fefcacd6a",
+      "name": "GET Unprocessed IDS From Buffer_A",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            },
+            {
+              "keyName": "up_ragflow_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        1248
+      ],
+      "id": "4e71cd79-5490-4e2b-a67c-7ec562d0daa4",
+      "name": "GET UnUploaded IDS From Buffer_A",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "python",
+        "pythonCode": "data = dict(_input.item.json.data)\ndocument_list = data.get(\"docs\", [])\n\nragflow_doc_ids = {\n    \"doc_id\": [],\n    \"pross_status\": [],\n    \"file_name\": [],\n    \"processed_at\": []\n}\n\nfor java_doc in document_list:\n  py_doc = java_doc.to_py()\n  ragflow_doc_ids[\"doc_id\"].append(py_doc.get(\"id\"))\n  ragflow_doc_ids[\"pross_status\"].append(py_doc.get(\"run\"))\n  ragflow_doc_ids[\"file_name\"].append(py_doc.get(\"name\"))\n  ragflow_doc_ids[\"processed_at\"].append(py_doc.get(\"process_begin_at\"))\n\nreturn {\"rag_docs\":ragflow_doc_ids }\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        1472
+      ],
+      "id": "2237c2ee-e6ef-462b-9192-7822a2892c90",
+      "name": "PARSER RGFlow Doc List",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  supa_data = dict(input_data).get(\"supa_docs\", {})\n  #supa_data = dict(_input.item.json).get(\"supabase_docs\", []) # lista de docs desde Supabase\n  ragflow_data = dict(input_data).get(\"rag_docs\", {}) # dict desde RAGFlow\n\n  #ragflow_data = dict(_input.item.json.rag_docs) \nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n\n# Función para procesar la entrada de n8n\ndef process_data(input_data) -> List[Dict[str, Any]]:\n    \n    # --- 1. Extraer y normalizar datos de entrada de manera robusta ---\n    supa_data: List[Dict[str, Any]] = dict(input_data).get(\"supa_docs\", {})\n    ragflow_raw_data: Dict[str, Any] = dict(input_data).get(\"rag_docs\", {})\n    data_bases = [supa_data, ragflow_raw_data] \n\n    # Si falta información crítica, retornar el error\n    if not supa_data or not ragflow_raw_data:\n        # Este mensaje es más preciso ahora\n        error_msg = \"Critical data missing. Expected 'supabase_docs' (list) and 'rag_docs' (dict) in input items.\"\n        raise [{\"json\": {\"error\": error_msg}}]\n        \n    # --- 2. Crear conjuntos para optimización ---\n    \n    # Crear un conjunto de nombres de archivos en RAGFlow para una búsqueda O(1)\n    ragflow_files: List = list(ragflow_raw_data.get(\"file_name\", []))\n    \n    # Crear un diccionario para mapear file_name a status en RAGFlow (opcional, para enriquecimiento)\n    ragflow_status_map: Dict[str, str] = {\n        name: status for name, status in zip(\n            ragflow_raw_data.get(\"file_name\", []), \n            ragflow_raw_data.get(\"pross_status\", [])\n        )\n    }\n\n    # Ragflow data ids\n    ragflow_id_map: Dict[str, str] = {\n        name: id for name, id in zip(\n            ragflow_raw_data.get(\"file_name\", []), \n            ragflow_raw_data.get(\"doc_id\", [])\n        )\n    }\n\n  # Results dictionary initialization\n    to_upload: List[Dict[str, Any]] = []\n    to_supabase_check: List[Dict[str, Any]] = []\n    to_ragflow_check: List[Dict[str, Any]] = []\n\n    # --- 3. Iterar y determinar el estado de cada documento (misma lógica) ---\n    for doc_json in supa_data:\n        doc = doc_json.get(\"json\")\n      \n        if doc:\n          pass\n        else:\n          raise \"Supabase data has no 'JSON' attributes, empty data.\"\n          \n        file_name = doc.get(\"file_name\", \"UNKNOWN_FILE\")\n        file_ragflow_id = doc.get(\"ragflow_id\", \"UNKNOWN_ID_CORRUPTED_DATA\")\n\n        # El documento esta siendo subido simultaneamente por ragflow y otra fuente, no hay registro en buffer pero si se encuentra en ragfloe\n        is_name_in_ragflow = file_name in list(ragflow_status_map.keys())\n        is_already_in_ragflow = (\n          doc.get(\"ragflow_id\") not in (\"NULL\", None) and\n          doc.get(\"ragflow_id\") in list(ragflow_id_map.values())\n        )\n\n        is_already_in_ragflow_but_not_supabased = (\n          doc.get(\"ragflow_id\") not in (\"NULL\", None) and\n          doc.get(\"ragflow_id\") in list(ragflow_id_map.values())\n        )\n\n        # Verificar duplicidad en RAGFlow\n        is_duplicate_in_ragflow = file_name in ragflow_files\n      \n        # Validar campos críticos de Supabase\n        is_ready_for_upload = (\n            doc.get(\"id\") is not None and\n            doc.get(\"supabase_key\") is not None and\n            doc.get(\"up_status\") == \"uploaded\" and\n            doc.get(\"up_ragflow_status\") == \"pending\" and\n            doc.get(\"pross_status\") == \"pending\" and \n            is_name_in_ragflow == False and\n            is_already_in_ragflow_but_not_supabased == False\n        )\n\n        # --- 4. Generar el item de salida para n8n ---\n        if not is_ready_for_upload:\n            status = \"unhandled_supabase_status\"\n        elif is_duplicate_in_ragflow or is_name_in_ragflow:\n            status = \"duplicate_in_ragflow\"\n        else:\n            status = \"ready_for_ragflow_upload\"\n\n        element = {\n            \"json\": {\n                \"file_name\": file_name,\n                \"supabase_id\": doc.get(\"id\"),\n                \"processing_status\": status,\n                \"ragflow_doc_status\": ragflow_status_map.get(file_name, \"N/A\"),\n                \"original_data\": doc\n            }\n        }\n\n        if status ==  \"unhandled_supabase_status\":\n            to_supabase_check.append(element)\n        elif status ==  \"duplicate_in_ragflow\":\n            to_ragflow_check.append(element)\n        else:\n            to_upload.append(element)\n\n    results = {\n      \"to_upload\": to_upload, \n      \"to_supabase_check\": to_supabase_check,\n      \"to_ragflow_check\": to_ragflow_check\n    }\n        \n    return results\n\n# El retorno envuelto en 'to_upload' es correcto para forzar una única salida.\nreturn process_data(input_data)"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3088,
+        1488
+      ],
+      "id": "451f1b60-c4c2-4af7-8d66-e3e00abc9c93",
+      "name": "Detect if Doc is Present in RAGFlow",
+      "executeOnce": false,
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2464,
+        1488
+      ],
+      "id": "baa75b22-5124-40fe-a038-f622c1dff6d5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        2256
+      ],
+      "id": "6296ae66-43d5-463a-b9cd-71ab4802f224",
+      "name": "PARSE Fetch Errors Supabase",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Document upload error logging and handling",
+        "height": 432,
+        "width": 1904,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1984,
+        2192
+      ],
+      "typeVersion": 1,
+      "id": "ca3b5839-7328-44f4-b5bf-1ead71c81238",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn {\"supa_docs\":_input.all()}  "
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        1248
+      ],
+      "id": "1dadbcd5-0b5e-48c6-ba74-1ebc38e7b59b",
+      "name": "PARSE to One Dict Supabase Results",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "executeOnce": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSER RGFlow Doc List\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        2448
+      ],
+      "id": "a764baa5-35dd-4cff-892d-3727b41bd1a7",
+      "name": "PARSE Fetch Errors Supabase1",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3312,
+        1984
+      ],
+      "id": "f4c0430a-e145-49b1-b18c-bffc171e3510",
+      "name": "PARSE Fetch Errors Sup-Rag comp",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2656,
+        2256
+      ],
+      "id": "f3a44cd8-559b-415a-91cc-57f802bd4341",
+      "name": "Almacenar errores",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2656,
+        2448
+      ],
+      "id": "5b3e1d5a-ddb3-43d7-9e68-777ac27f753a",
+      "name": "Almacenar errores1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3504,
+        2272
+      ],
+      "id": "dbad38cc-0444-4478-96b6-dbaf7904c18c",
+      "name": "Trigger Mecanismo de Reparacion",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2864,
+        2352
+      ],
+      "id": "8c2fac69-16a4-4689-845f-b743ba22444d",
+      "name": "Merge1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3072,
+        2352
+      ],
+      "id": "f5b5d6a2-d7a5-49a5-9c53-f0d5a2495d39",
+      "name": "parse Errores",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3296,
+        2272
+      ],
+      "id": "7f82f0cd-5bcf-4f09-b02d-7326cc6ec401",
+      "name": "Merge2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2672,
+        1488
+      ],
+      "id": "0f4f4778-8022-497a-ab33-79dce91d21db",
+      "name": "Wait",
+      "webhookId": "4931e501-6b4d-459f-b8a7-9ada5331a439"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# Lista para almacenar los items de salida formateados\ntry:\n    input_data = _input.all()[0].get(\"json\", {})\nexcept IndexError:\n    return [{\"json\": {\"error\": \"Invalid input structure: Input list is empty.\"}}]\nexcept Exception as e:\n    return [{\"json\": {\"error\": f\"Error, inccorrect data structura: {str(e)}\"}}]\n  \nREQUIRED_KEYS_BY_POSITION = [\n    \"supa_docs\",  # Esperado en _input.all()[0]\n    \"rag_docs\"    # Esperado en _input.all()[1]\n]\n\n# Lista para almacenar las claves que faltan\nmissing_keys: List[str] = []\n\ntry:\n    input_data = _input.all()\n    \n    # 1. Validación de la cantidad de ítems\n    if len(input_data) != len(REQUIRED_KEYS_BY_POSITION):\n        error_msg = f\"Merge output is malformed. Expected {len(REQUIRED_KEYS_BY_POSITION)} items, but got {len(input_data)}.\"\n        raise IndexError(error_msg)\n\n    # 2. Iterar sobre los ítems (posiciones 0 y 1) y validar su contenido\n    for i, key in enumerate(REQUIRED_KEYS_BY_POSITION):\n        \n        # Acceso robusto al JSON del ítem en la posición 'i'\n        item_json: Dict[str, Any] = input_data[i].get(\"json\", {})\n        \n        # Intentamos obtener el valor de la clave específica (ej., 'supa_docs')\n        data = item_json.get(key)\n        \n        # Validación de existencia: revisa si la data no existe O si existe pero está vacía\n        if data is None or (isinstance(data, (list, dict)) and not data):\n            missing_keys.append(key)\n            \n    # 3. Generar el error si faltan claves\n    if missing_keys:\n        error_message = f\"One of the needed data bases data leaking: {', '.join(missing_keys)}. Trigger compensation mechanism.\"\n        raise ValueError(error_message)\n\n    # 4. Si la validación es exitosa, fusionamos los dos ítems en uno solo \n    # para simplificar el flujo en el siguiente nodo 'Detect if Document...'\n    \n    final_output = {\n        REQUIRED_KEYS_BY_POSITION[0]: input_data[0].get(\"json\", {}).get(REQUIRED_KEYS_BY_POSITION[0]),\n        REQUIRED_KEYS_BY_POSITION[1]: input_data[1].get(\"json\", {}).get(REQUIRED_KEYS_BY_POSITION[1])\n    }\n    \n    # Retornamos un único ítem con toda la data fusionada para el siguiente nodo\n    return [{\"json\": final_output}]\n\nexcept Exception as e:\n    # Captura y relanza el error para que n8n lo redirija al error output\n    raise e"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        1488
+      ],
+      "id": "158fcf6d-4b01-4473-a2ba-dfee3bb925e8",
+      "name": "Seek Data Leak",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Ragflow):\n-document storage\n-metadata storage\n\n",
+        "height": 464,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        576
+      ],
+      "typeVersion": 1,
+      "id": "a5d4b17e-7c4e-4fa5-9f1f-5fdeae7476e6",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI",
+          "mode": "list",
+          "cachedResultName": "CRC_Agents",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        800
+      ],
+      "id": "afb47eea-7081-47c7-8755-bf65c5876c50",
+      "name": "Google Drive Trigger1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        304,
+        800
+      ],
+      "id": "220dfc82-ff45-4c1a-86cf-9d4457c4fc0d",
+      "name": "Download file1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        752,
+        768
+      ],
+      "id": "12567a59-8276-49b6-85da-d9041ef22632",
+      "name": "Upload to buffer switch1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"pending\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "98617d70-b0c5-4320-ad9f-eca04595d404",
+      "name": "Insert Buffer Record: Upload1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        976,
+        624
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        624
+      ],
+      "id": "23f03553-df67-4fd7-beb4-84aaecb27054",
+      "name": "GET Unprocessed IDS From Buffer1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        800
+      ],
+      "id": "894f5b0e-e018-48c3-a8f0-3334d29de108",
+      "name": "Upload to Supabase1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Compensation Mechanisms\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 528,
+        "width": 1632
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5920,
+        1760
+      ],
+      "typeVersion": 1,
+      "id": "ad802034-c6de-46d5-83b9-e5aa5000a9ab",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Report Generator\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 528,
+        "width": 912,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        7616,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "42522270-0898-4c53-ac13-643a0998b69e",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Notification Systems\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 528,
+        "width": 912,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        7616,
+        1760
+      ],
+      "typeVersion": 1,
+      "id": "f9295b0f-a17c-488c-9682-d379c549b09f",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Whatsapp):\n-document storage\n-metadata storage\n\n",
+        "height": 464,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "f5d6111f-ca5c-47d7-8bb3-adb8d84b9776",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI",
+          "mode": "list",
+          "cachedResultName": "CRC_Agents",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        224
+      ],
+      "id": "97205362-c507-4629-8309-c26d69da36c4",
+      "name": "Google Drive Trigger2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        304,
+        224
+      ],
+      "id": "f254ec0a-2b0d-4ff3-b9f0-0dd15db3ac97",
+      "name": "Download file2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        752,
+        192
+      ],
+      "id": "f7d8aa2a-fb13-4de6-b076-fb3018908ebb",
+      "name": "Upload to buffer switch2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"pending\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "a4fa88dd-04f5-472f-bd46-7704dd05795f",
+      "name": "Insert Buffer Record: Upload2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        976,
+        48
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        48
+      ],
+      "id": "a9aae04e-0217-4863-bfcc-7914cd9c425c",
+      "name": "GET Unprocessed IDS From Buffer2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        224
+      ],
+      "id": "82be4966-90e0-4b29-aecc-9ad9fc45ee8c",
+      "name": "Upload to Supabase2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.to_upload }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "array",
+                      "operation": "lengthGt",
+                      "rightType": "number"
+                    },
+                    "id": "6f2c5f88-ab63-4821-86bd-45f88befcb8f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "files_to_upload"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "69762c4a-8b35-41dd-b952-d869e5ff59b3",
+                    "leftValue": "={{ $json.to_supabase_check }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "array",
+                      "operation": "lengthEquals",
+                      "rightType": "number"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "files_to_check_supabase"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7d87f52f-773c-4b7c-9917-d26a26b15af1",
+                    "leftValue": "={{ $json.to_ragflow_check }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "array",
+                      "operation": "lengthEquals",
+                      "rightType": "number"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "files_to_check_ragflow"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        3312,
+        1472
+      ],
+      "id": "97c146a0-55e9-463c-bfcc-659112ddc380",
+      "name": "DB Storage Synch Router"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  return input_data.get(\"to_upload\", [])\nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        1312
+      ],
+      "id": "5c51d665-8003-4288-9f22-a740484a71eb",
+      "name": "PARSER To RAGFlow Upload",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  return input_data.get(\"to_supabase_check\", [])\nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        1488
+      ],
+      "id": "8cc9ce25-30a4-4b3d-af81-16341265c4d9",
+      "name": "PARSER To Supabase Check",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# input data from supabase and ragflow parser\ntry:\n  input_data = _input.all()[0].get(\"json\", {})\n  return input_data.get(\"to_ragflow_check\", [])\nexcept Exception as e:\n  return {\"error\": f\"Invalid input structure: {str(e)}\"}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        1680
+      ],
+      "id": "95d44447-4e62-4cf5-90cc-d25affda1193",
+      "name": "PARSER To RAGFlow Check",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/authenticated/{{ $json.file_name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3904,
+        1312
+      ],
+      "id": "b33fe86e-ea20-457c-84e0-ca66a7d314ea",
+      "name": "GET Documents from Suapabase",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4096,
+        2000
+      ],
+      "id": "da31d508-df40-435b-be0d-dd1fb0e590a4",
+      "name": "Merge Error Catcher PARSER"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+            },
+            {
+              "name": "Content-Type",
+              "value": "multipart/form-data"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4128,
+        1312
+      ],
+      "id": "f257db7c-8c0b-42cd-a6c0-fb2236c3d1f2",
+      "name": "POST Upload Docs to RAGFlow",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5184,
+        1968
+      ],
+      "id": "e562c14b-7827-4d6d-8789-60031a26d900",
+      "name": "Merge Error Catcher PARSER1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/bddb8cda998711f094870242ac120006/chunks",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-I0ZThlYWJlOTk4YzExZjA5NDQ0MDI0Mm"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "document_ids",
+              "value": "={{ $json.docs_to_process }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4864,
+        1312
+      ],
+      "id": "a27af7c8-39f7-4a8a-8b18-87a282cb3046",
+      "name": "POST Activate RAGFlow",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2176,
+        2256
+      ],
+      "id": "aaafb4d7-69ef-4f47-b57c-5143ceee117f",
+      "name": "Catch Bad RAGFlow calling",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# Lista para almacenar los IDs de RAGFlow extraídos\nragflow_ids: List[str] = []\n\ntry:\n    docs_to_process = _input.all()\n    if not docs_to_process:\n        raise IndexError(\"Input list is empty.\")\n        \n    for item in docs_to_process:\n\n        item_data = item.get(\"json\", {})\n        is_activated = item_data.get(\"activation_required\", False)\n        doc_id = item_data.get(\"ragflow_id\")\n      \n        if is_activated and doc_id:\n            ragflow_ids.append(doc_id)\n            \n    return [{\n        \"json\": {\n            \"docs_to_process\": ragflow_ids\n        }\n    }]\n\nexcept IndexError:\n    return [{\n        \"json\": {\n            \"error\": \"Input data is empty. No documents were passed to parse IDs.\",\n            \"docs_to_process\": []\n        }\n    }]\n\nexcept Exception as e:\n    return [{\n        \"json\": {\n            \"error\": f\"Error during RAGFlow ID aggregation loop: {str(e)}\",\n            \"docs_to_process\": []\n        }\n    }]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4624,
+        1312
+      ],
+      "id": "b652684e-7c0a-4944-9843-96af3707e001",
+      "name": "PARSER Docs Ids",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\n\n# Lista para almacenar los items de salida formateados\ntry:\n    input_data = _input.all()[0].get(\"json\", {})\nexcept IndexError:\n    return [{\"json\": {\"error\": \"Invalid input structure: Input list is empty.\"}}]\nexcept Exception as e:\n    return [{\"json\": {\"error\": f\"Error, inccorrect data structura: {str(e)}\"}}]\n\ndocs_to_process = []\ninput_data = _input.all()[0].get(\"json\", {}).get(\"data\",{})\n\nfor item in input_data:\n    try:\n        ragflow_response: Dict[str, Any] = item.to_py()\n        ragflow_id = ragflow_response.get(\"doc_id\") or ragflow_response.get(\"id\")\n        doc_name = ragflow_response.get(\"name\") or item.get(\"json\", {}).get(\"file_name\") \n        initial_state = ragflow_response.get(\"run\") or ragflow_response.get(\"status\")\n        \n        if ragflow_id and doc_name and initial_state:\n\n            docs_to_process.append({\n  \n                \"json\": {\n                    \"ragflow_id\": ragflow_id,\n                    \"file_name\": doc_name,\n                    \"activation_required\": True \n                }\n            })\n            \n        else:\n\n            docs_to_process.append({\n                \"json\": {\n                    \"error\": \"Missing critical IDs from RAGFlow response.\",\n                    \"response_data\": ragflow_response,\n                    \"file_name\": doc_name,\n                    \"activation_required\": False\n                }\n            })\n\n    except Exception as e:\n    \n        docs_to_process.append({\n            \"json\": {\n                \"error\": f\"Error during parsing RAGFlow response: {str(e)}\",\n                \"file_name\": item.get(\"json\", {}).get(\"file_name\", \"UNKNOWN\"),\n                \"activation_required\": False\n            }\n        })\n\nreturn docs_to_process\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4368,
+        1312
+      ],
+      "id": "0ac82007-5cb7-4567-aada-e27f304d4863",
+      "name": "PARSER Docs to Process",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "Parse PDF keys to RAGFlow POST",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET IDs from Supabase": {
+      "main": [
+        [
+          {
+            "node": "Compare Data Supabase_RGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine Unprocessed Documents": {
+      "main": [
+        [
+          {
+            "node": "Compare Data Supabase_RGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Data Supabase_RGFlow": {
+      "main": [
+        [
+          {
+            "node": "GET PDF from Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET PDF from Supabase": {
+      "main": [
+        [
+          {
+            "node": "Send to RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse PDF keys to RAGFlow POST": {
+      "main": [
+        [
+          {
+            "node": "Activate RAGFlow pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activate RAGFlow pipeline": {
+      "main": [
+        [
+          {
+            "node": "Update Supabase Buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET UnUploaded IDS From Buffer_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET UnUploaded IDS From Buffer_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert Buffer Record: Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Upload": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET UnUploaded IDS From Buffer_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Failed": {
+      "main": [
+        [
+          {
+            "node": "Insert Error Buffer Record: Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Error Buffer Record: Pending": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Document List RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "PARSER RGFlow Doc List",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Catch Bad RAGFlow calling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ENV_VARIABLES": {
+      "main": [
+        [
+          {
+            "node": "GET Document List RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET UnUploaded IDS From Buffer_A": {
+      "main": [
+        [
+          {
+            "node": "PARSE to One Dict Supabase Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSER RGFlow Doc List": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "PARSE Fetch Errors Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect if Doc is Present in RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "DB Storage Synch Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE Fetch Errors Sup-Rag comp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE to One Dict Supabase Results": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE Fetch Errors Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Fetch Errors Supabase": {
+      "main": [
+        [
+          {
+            "node": "Almacenar errores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Fetch Errors Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Almacenar errores1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Almacenar errores": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Almacenar errores1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "parse Errores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse Errores": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Trigger Mecanismo de Reparacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Seek Data Leak",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seek Data Leak": {
+      "main": [
+        [
+          {
+            "node": "Detect if Doc is Present in RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch1": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Upload1": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Download file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file2": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch2": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Upload2": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase2": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSER To RAGFlow Upload": {
+      "main": [
+        [
+          {
+            "node": "GET Documents from Suapabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Error Catcher PARSER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DB Storage Synch Router": {
+      "main": [
+        [
+          {
+            "node": "PARSER To RAGFlow Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSER To Supabase Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSER To RAGFlow Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSER To RAGFlow Check": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Merge Error Catcher PARSER",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "PARSER To Supabase Check": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Merge Error Catcher PARSER",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "GET Documents from Suapabase": {
+      "main": [
+        [
+          {
+            "node": "POST Upload Docs to RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Error Catcher PARSER1",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "POST Upload Docs to RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "PARSER Docs to Process",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Error Catcher PARSER1",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "POST Activate RAGFlow": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Merge Error Catcher PARSER1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSER Docs Ids": {
+      "main": [
+        [
+          {
+            "node": "POST Activate RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Error Catcher PARSER1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "PARSER Docs to Process": {
+      "main": [
+        [
+          {
+            "node": "PARSER Docs Ids",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Error Catcher PARSER1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b1bbb7b1-47df-4f1c-a987-88f172fb5ca9",
+  "meta": {
+    "instanceId": "61f78869dc0b0a74cc393ddba302cbb1cc5ddbc8fa3d35afd61eb4be3ead72f1"
+  },
+  "id": "LSHxyRDDCvvXvUdQ",
+  "tags": []
+}

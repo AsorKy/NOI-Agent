@@ -1,0 +1,6382 @@
+{
+  "name": "NOI-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1iGshhzsCrRUe2RTMbYv3TgjmxtFJP85_",
+          "mode": "list",
+          "cachedResultName": "CRC_NOI_Agent",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1iGshhzsCrRUe2RTMbYv3TgjmxtFJP85_"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        1504
+      ],
+      "id": "21b8c08b-5773-4b09-92c3-d4e6c2ac071d",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6sU8QsrVmPgZUn7D",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -160,
+        1504
+      ],
+      "id": "92d7076c-b930-469a-a799-93f8189dcf37",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6sU8QsrVmPgZUn7D",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        256,
+        1472
+      ],
+      "id": "3603c049-9626-4645-8787-f78181f787b3",
+      "name": "Upload to buffer switch"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"pending\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "7d271e86-1810-4301-8119-5aac49ec541f",
+      "name": "Insert Buffer Record: Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        912,
+        1248
+      ],
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"failed\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "7ca816a0-4eb8-4e3b-9390-decae69c267e",
+      "name": "Insert Buffer Record: Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        4032
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6dc2557e-c284-4727-81b2-dcaaa9ef453e",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1616,
+        4032
+      ],
+      "id": "e33e6c69-91e7-417a-8d69-4f7571efcd7e",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        4048
+      ],
+      "id": "23dbd982-a98d-4732-b53a-f9649b7eb24c",
+      "name": "Update a row",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        1248
+      ],
+      "id": "084672c7-a569-4a65-8edd-221cd3f57e24",
+      "name": "GET Unprocessed IDS From Buffer",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer_errors",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"error\": \"{{$json.error.message}}\",\n  \"status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "a650d24f-18d3-461f-8c41-66320cccf2af",
+      "name": "Insert Error Buffer Record: Pending",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        4032
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2b54888-a471-4979-b599-131954118c5a",
+              "name": "NOI-RAGFlow-dataset-ID",
+              "value": "dc8d13caa2d211f0921e36bf8e6cac5d",
+              "type": "string"
+            },
+            {
+              "id": "3b66e7b4-5f94-476c-9097-d9238813bde8",
+              "name": "RAGFLOW-SERVER-API-1",
+              "value": "172.29.192.1:9380",
+              "type": "string"
+            },
+            {
+              "id": "3246288f-3b2a-4fcc-b6fc-1edc6326c662",
+              "name": "SUPABASE-PDF-BUCKET-URL",
+              "value": "erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket",
+              "type": "string"
+            },
+            {
+              "id": "432c5424-48c2-4672-9928-3538606906bd",
+              "name": "RAGFLOW-API-KEY",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj",
+              "type": "string"
+            },
+            {
+              "id": "023f7d26-d93c-4e3e-aac4-b568601929f8",
+              "name": "NGROK-TOKEN",
+              "value": "33Cu39rtAk1b4phB3kta8zGYtqk_MxCtZT8CK4A7q1LnKGbY",
+              "type": "string"
+            },
+            {
+              "id": "68526840-7592-46e6-9278-504dcdd2356f",
+              "name": "RAGFLOW-LOCAL-SERVER",
+              "value": "https://unsaltatory-tinisha-visionally.ngrok-free.dev ",
+              "type": "string"
+            },
+            {
+              "id": "66f39a3b-945a-4a24-a844-3dab72871c74",
+              "name": "NGROK-DEV-TOKEN",
+              "value": "33CuVlZm2WWXBMBSDIlA0NWKuWd_iKwbvtk5K7py1x621UBd",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1408,
+        1584
+      ],
+      "id": "bb25003b-f788-44f7-9d5c-755ace3ed9f5",
+      "name": "ENV_VARIABLES"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Google Drive):\n-document storage\n-metadata storage\n\n",
+        "height": 608,
+        "width": 1792,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "ac57019e-6b0a-4f7c-84b6-c26f620901c8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## OCR system database connection",
+        "height": 1008,
+        "width": 4912,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2112,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "49bb3465-d2cb-4848-9b31-6a781c08c1ee",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Document upload error logging and handling",
+        "height": 304,
+        "width": 1104,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1024,
+        3952
+      ],
+      "typeVersion": 1,
+      "id": "e4fcfa9e-32de-4646-b09a-f08713ef4934",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Document processing pipeline",
+        "height": 480,
+        "width": 912,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        7056,
+        1696
+      ],
+      "typeVersion": 1,
+      "id": "615d055f-eeb0-4c21-a33a-80ba5187512f",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        1504
+      ],
+      "id": "3533257b-10ca-43e8-83a6-8676ab13a235",
+      "name": "Upload to Supabase",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            },
+            {
+              "keyName": "up_ragflow_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        1248
+      ],
+      "id": "b9d4a55d-50b9-41e4-8c81-f93f22896250",
+      "name": "GET UnUploaded IDS From Buffer_A",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2624,
+        4016
+      ],
+      "id": "f2c4d1ce-735f-4474-b184-97272d8e27b9",
+      "name": "PARSE Fetch Errors Supabase",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Document upload error logging and handling",
+        "height": 432,
+        "width": 1904,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2160,
+        3952
+      ],
+      "typeVersion": 1,
+      "id": "83392752-66da-496f-a9cc-98d6b3898c55",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSER RGFlow Doc List\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2624,
+        4208
+      ],
+      "id": "eb2d8d5a-3dfe-4a60-8368-80190e90b99d",
+      "name": "PARSE Fetch Errors Supabase1",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2832,
+        4016
+      ],
+      "id": "8d9771f4-ed4b-41a4-bf7e-d9969c0ed0ff",
+      "name": "Almacenar errores",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2832,
+        4208
+      ],
+      "id": "af40cff7-5c2f-4c1a-9fad-2b9189742068",
+      "name": "Almacenar errores1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        4032
+      ],
+      "id": "7fe0d55a-737d-4721-9e9d-8ccf14e558e3",
+      "name": "Trigger Mecanismo de Reparacion",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3040,
+        4112
+      ],
+      "id": "6f33fd61-600b-4924-a889-133fe095d168",
+      "name": "Merge1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3248,
+        4112
+      ],
+      "id": "1b19c359-6cbf-41ce-983a-717197c029bd",
+      "name": "parse Errores",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3472,
+        4032
+      ],
+      "id": "78f1fe7b-a594-421e-9447-9e507639dbf7",
+      "name": "Merge2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3200,
+        1312
+      ],
+      "id": "230648a5-f24a-41e1-a44d-275552c7b99b",
+      "name": "Wait",
+      "webhookId": "dad3a147-cff4-4b68-bb38-50b5ea67d83c"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Ragflow):\n-document storage\n-metadata storage\n\n",
+        "height": 464,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "ece87ca0-1ee2-4e1a-9578-cb7fb9397a89",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI",
+          "mode": "list",
+          "cachedResultName": "CRC_Agents",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        832
+      ],
+      "id": "defb736f-f6ef-468c-bb28-ae66f83b0e41",
+      "name": "Google Drive Trigger1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        832
+      ],
+      "id": "99cc6c63-f081-4699-8f20-8253fad4fecf",
+      "name": "Download file1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        272,
+        800
+      ],
+      "id": "53f1e259-b0ac-4659-acaa-c8003fc42ae2",
+      "name": "Upload to buffer switch1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"pending\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "0aaced8e-804b-4722-a184-73f4ea4d318a",
+      "name": "Insert Buffer Record: Upload1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        496,
+        656
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        656
+      ],
+      "id": "fd102f71-b3f6-423c-b882-0502f34fa8df",
+      "name": "GET Unprocessed IDS From Buffer1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        832
+      ],
+      "id": "eabf7295-b05d-440c-b2cb-83369077ddcf",
+      "name": "Upload to Supabase1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Report Generator\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 528,
+        "width": 912,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        11472,
+        1424
+      ],
+      "typeVersion": 1,
+      "id": "c8ecad5f-92cf-4f45-a075-343fe66c10b7",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Notification Systems\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 528,
+        "width": 912,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        11472,
+        2016
+      ],
+      "typeVersion": 1,
+      "id": "259e3969-9b74-4c04-8219-356950f64b38",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Whatsapp):\n-document storage\n-metadata storage\n\n",
+        "height": 464,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "9a95b549-6c47-478d-8dda-320730b29c24",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI",
+          "mode": "list",
+          "cachedResultName": "CRC_Agents",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1SlclUtHUCxSOe71rlGT_Q5sGMb7KXPAI"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        288
+      ],
+      "id": "0ac32f80-ffde-494e-903f-0c1852cdbbb6",
+      "name": "Google Drive Trigger2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        288
+      ],
+      "id": "08a0dfa4-34db-4d7d-9f51-90422c0ce0b0",
+      "name": "Download file2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        272,
+        256
+      ],
+      "id": "8d4d5bcc-0fab-4015-8135-82d100225c54",
+      "name": "Upload to buffer switch2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://erucdhreevjndujivweu.supabase.co/rest/v1/buffer",
+        "allowUnauthorizedCerts": true,
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"file_name\": \"{{$json[\"Key\"]}}\",\n  \"supabase_key\": \"{{$json[\"Id\"]}}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"pending\",\n  \"pross_status\": \"pending\"\n}\n",
+        "headerParametersJson": "{\n  \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"apikey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg\",\n  \"Content-Type\": \"application/json\",\n  \"Prefer\": \"return=minimal\"\n}\n",
+        "queryParametersJson": "{}"
+      },
+      "id": "b3688465-7b4f-4764-af16-ed51c990952d",
+      "name": "Insert Buffer Record: Upload2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        496,
+        112
+      ],
+      "disabled": true,
+      "notes": "The log buffer must have the following fields:\n\n-file_name\n-supabase_key\n-ragflow_id\n-up_status (uploaded, failed)\n-pross_status (pending, processed, failed)\n-timestamp\n\nWhen a file is uploaded from Google Drive for the first time, it logs the following in the buffer:\n\n-file_name: file name\n-supabase_key: supabase key if the upload was successful\n-ragflow_id: Null \n-up_status: uploaded if the upload to supabase was successful, pending otherwise\n-pross_status: pending\n-timestamp: timestamp of when the file was uploaded to supabase"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pross_status",
+              "condition": "eq",
+              "keyValue": "pending"
+            },
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        112
+      ],
+      "id": "80c527d0-d597-49a4-84d5-eb75b7caefc5",
+      "name": "GET Unprocessed IDS From Buffer2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        288
+      ],
+      "id": "460bcb68-b64e-40b1-b5bd-1eefdc309eea",
+      "name": "Upload to Supabase2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/chunks",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "document_ids",
+              "value": "={{ $json.document_ids }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        7504,
+        1824
+      ],
+      "id": "4155e90a-589c-49ed-b0fa-2568ab6efb43",
+      "name": "POST Activate RAGFlow",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2352,
+        4016
+      ],
+      "id": "de3f81bb-5207-4a0b-a5f6-2d62f1148b73",
+      "name": "Catch Bad RAGFlow calling",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## RAGFlow and Spabase queries\n",
+        "height": 608,
+        "width": 736
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1344,
+        1168
+      ],
+      "typeVersion": 1,
+      "id": "bf937391-da4d-458f-85b3-95f35d6ff1dc",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import json\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n# El script se ejecutará una vez por cada ítem que falló en el nodo anterior.\n# Por lo tanto, usamos _input.all() para acceder a la lista de ítems fallidos.\n# Cada ítem en esta lista contendrá el objeto de error.\n\nresults: List[Dict[str, Any]] = []\n\nfor item in _input.all():\n    # Accedemos al objeto 'error' que n8n inyecta en el JSON del ítem fallido\n    error_data = item.get(\"json\", {}).get(\"error\", {})\n    \n    # Accedemos a los datos originales del ítem que causó el error (para trazabilidad)\n    original_item = item.get(\"json\", {}).get(\"item\", {})\n    \n    # Si el error ocurrió en un paso de procesamiento complejo, \n    # la data del ítem original podría ser la data completa que entró al nodo 'Code'.\n    # Intentaremos extraer el nombre del archivo y el ID de Supabase si están disponibles.\n    file_name = original_item.get(\"file_name\", \"N/A - Check Original Data\")\n    supabase_id = original_item.get(\"supabase_id\", \"N/A - Check Original Data\")\n    \n    # Manejo de casos donde el ítem original es muy anidado o no tiene las claves\n    if file_name.startswith(\"N/A\") and original_item:\n        # Intenta un parseo más profundo si es necesario\n        file_name = original_item.get(\"original_data\", {}).get(\"file_name\", file_name)\n        supabase_id = original_item.get(\"original_data\", {}).get(\"id\", supabase_id)\n\n\n    # Extraer la información clave del error de n8n\n    error_message = error_data.get(\"message\", \"Error message not provided.\")\n    error_stack = error_data.get(\"stack\", \"Stack trace not provided.\")\n    error_node_id = error_data.get(\"node\", {}).get(\"id\", \"N/A\")\n    error_node_name = error_data.get(\"node\", {}).get(\"name\", \"N/A\")\n\n    # Generar el timestamp actual\n    timestamp = datetime.now().isoformat()\n    \n    # Crear el payload estructurado para la base de datos de errores\n    error_payload = {\n        \"file_name\": file_name,\n        \"supabase_id\": supabase_id,  # Referencia al documento en la tabla 'buffer'\n        \"error_message\": error_message,\n        \"error_stack_trace\": error_stack, # Útil para depuración avanzada\n        \"error_node_name\": error_node_name,\n        \"processing_step\": \"PARSE to One Dict Supabase Results\", # Paso donde ocurrió el fallo\n        \"timestamp\": timestamp,\n        # Guarda todo el JSON original del error por si acaso\n        \"raw_error_data\": error_data \n    }\n    \n    results.append({\"json\": error_payload})\n\nreturn results"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2352,
+        4528
+      ],
+      "id": "31ac5590-0d9c-43e1-8a2b-05a1475ff00c",
+      "name": "Catch Bad RAGFlow calling1",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## API KEY-related bad connections and errors",
+        "height": 336,
+        "width": 1904,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2160,
+        4432
+      ],
+      "typeVersion": 1,
+      "id": "55c01b1d-cb37-4aed-897c-78c9eb4e38f4",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13d9d854-0c34-458e-97ff-555c268ff998",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GOOD API"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f65bc15c-360b-4aa9-95c7-755f428f025d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NO Dataset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c9fc25-dbb1-4fef-acbe-f728f58df058",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "Authentication error: API key is invalid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BAD API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1888,
+        1360
+      ],
+      "id": "bad7013d-ed21-41c6-a713-9f0fbc4d2447",
+      "name": "API Badcall Ragflow Router"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2400,
+        1424
+      ],
+      "id": "b481c857-3750-4a3f-844c-306a7484042e",
+      "name": "Split RAGFlow Docs"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        1424
+      ],
+      "id": "42d71209-959c-48bb-bd4e-4f5082822523",
+      "name": "SPLIT Ragflow Docs"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        1552
+      ],
+      "id": "bf1ee298-83dc-4bc8-bc44-d9f3dac97c70",
+      "name": "PARSE RAGFlow Docs",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"supa_docs\": {{ $json }}\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2176,
+        1248
+      ],
+      "id": "2dc8dd84-d88a-4e19-ac99-2f4d510ed43b",
+      "name": "PARSE Docs in Supabase",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3024,
+        1312
+      ],
+      "id": "f8a053d8-6957-40dc-9e31-6d9c722018ca",
+      "name": "MERGE Doc Queries"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "ragflow_docs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        1408
+      ],
+      "id": "96b509ba-f7ba-4f1e-aa49-df3db55c2362",
+      "name": "Aggregate: RAGFlow"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "supa_docs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        1248
+      ],
+      "id": "c79f073d-3232-46d7-b00e-55eefb968560",
+      "name": "Aggregate: Supabase"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.supa_docs }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "1026f38e-d93b-482f-97fe-7ab1778e0179"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Supa_exists"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "94dd2ede-5d80-4e17-bc8f-be8623ac3bb7",
+                    "leftValue": "={{ $json.ragflow_docs }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ragflow_exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        3392,
+        1312
+      ],
+      "id": "0a84faf8-10c6-4807-b99c-bf9263a0db53",
+      "name": "Switch DB Query Router"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "supa_docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3904,
+        1232
+      ],
+      "id": "fc45e402-78d0-4b3e-83ba-74f398c24e3a",
+      "name": "SPLIT Supa Docs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60353313-cf65-4eea-98ee-987e04863bdc",
+              "leftValue": "={{ $json.supa_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8a70551e-3113-4431-8484-75dc130f2924",
+              "leftValue": "={{ $json.supa_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3632,
+        1248
+      ],
+      "id": "3e18e541-f35d-4d26-8b42-66f8b6f8eb98",
+      "name": "Supa_Data_Checker"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60353313-cf65-4eea-98ee-987e04863bdc",
+              "leftValue": "={{ $json.ragflow_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "7c21460c-4786-4db1-a5ec-b8dbebe1db40",
+              "leftValue": "={{ $json.ragflow_docs }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3632,
+        1408
+      ],
+      "id": "73b494f3-1c3f-42a4-827e-b6563dc33091",
+      "name": "Ragf_Data_Checker"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\",  \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"pross_status\": \"{{ $json.pross_status }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4496,
+        1328
+      ],
+      "id": "bd114569-2fdf-4ee3-902d-45e88a31ed88",
+      "name": "PARSE Supa Names",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "ragflow_docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3904,
+        1536
+      ],
+      "id": "aa096ba4-fd6c-4649-9d11-2517e159a573",
+      "name": "SPLIT Ragf Docs"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4112,
+        1536
+      ],
+      "id": "8bb3b75e-7aed-49f2-877f-590191625e63",
+      "name": "LOOP Parser"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4112,
+        1232
+      ],
+      "id": "a50f41c2-3693-4b8d-9bbb-95630d616fee",
+      "name": "LOOP Parser1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42c1fe3c-c1df-43f3-b23a-a98b8f268a39",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1e89d6e0-0a86-4bd2-897a-1cdf7e758b0a",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "e0ed85ee-1178-4cbb-aaa2-191a0e16742c",
+              "leftValue": "={{ $json.supabase_key }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c85a16ad-bd97-4023-a9b0-74982fb4b7c2",
+              "leftValue": "={{ $json.supabase_key }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "5d5df582-3c13-49a4-8ee5-bc3c1383766c",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e8a1c527-8d44-4768-bcab-3077a43eac90",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "c8372a9f-6135-4578-b748-65cb99e9bb9b",
+              "leftValue": "={{ $json.up_status }}",
+              "rightValue": "uploaded",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "78697473-d57c-401f-9ce1-528caae2de50",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "431e5e25-50c0-466f-944c-a6a3c649ff2c",
+              "leftValue": "={{ $json.up_ragflow_status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4272,
+        1328
+      ],
+      "id": "4b852b9c-b6a6-49d1-9621-7e99eb714c8b",
+      "name": "Existence Conditions  Supa"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42c1fe3c-c1df-43f3-b23a-a98b8f268a39",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1e89d6e0-0a86-4bd2-897a-1cdf7e758b0a",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "5d5df582-3c13-49a4-8ee5-bc3c1383766c",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e8a1c527-8d44-4768-bcab-3077a43eac90",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "c8372a9f-6135-4578-b748-65cb99e9bb9b",
+              "leftValue": "={{ $json.dataset_id }}",
+              "rightValue": "uploaded",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "81075e67-3b0a-4528-92d5-7567c99376b7",
+              "leftValue": "={{ $json.dataset_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4272,
+        1632
+      ],
+      "id": "dc278c3f-3997-4911-8814-e98758611d5b",
+      "name": "Existence Conditions  RAGF"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\",  \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"pross_status\": \"{{ $json.processed }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4496,
+        1632
+      ],
+      "id": "ac18f7f6-182b-4fc4-bdce-015d9e950c77",
+      "name": "PARSE Ragf Docs",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\",  \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"pross_status\": \"pending\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4880,
+        1744
+      ],
+      "id": "214f9f5b-aa3c-499f-bea8-808f94cec5ab",
+      "name": "PARSE Processing State",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf9b9d58-13af-4149-bd4f-433f39162ad0",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "=UNSTART",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4672,
+        1728
+      ],
+      "id": "123b7d0d-8bb4-4026-83de-9cd5941685e4",
+      "name": "Pross Status"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "document_ids"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        7296,
+        1824
+      ],
+      "id": "0bb7dc73-b138-4ea8-9ad1-f99dab479e9f",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        7104,
+        1824
+      ],
+      "id": "62debb3c-b7bb-4072-8e0b-0779d4d19174",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        5520,
+        1856
+      ],
+      "id": "2c75e28e-e89f-4e52-9da4-5f2af9e00bcf",
+      "name": "LOOP Parser3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"document_ids\": \"{{ $json.ragflow_id }}\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5920,
+        1968
+      ],
+      "id": "33b11279-23ae-49cc-accc-735f0ff3a973",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a0578834-7ba5-4d06-9e3b-a8366ca18237",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "de18bbe6-062d-434d-b7f7-2014065aada1",
+              "leftValue": "={{ $json.pross_status }}",
+              "rightValue": "UNSTART",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5680,
+        1968
+      ],
+      "id": "6cd3872c-f1b3-4acf-a3fa-980b2fce0e04",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "content": "## RAGFlow and Spabase queries\n",
+        "height": 848,
+        "width": 832
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2624,
+        2944
+      ],
+      "typeVersion": 1,
+      "id": "0ac9acfb-8cb2-4e21-86c4-9b07cafa79f8",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2320,
+        3424
+      ],
+      "id": "de3b3c54-3515-4a3e-b5ee-af09c2effd31",
+      "name": "Synch RAGFlow  Schedule",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1648,
+        1440
+      ],
+      "id": "695de7c2-7c2d-467c-9c47-728cf9662d72",
+      "name": "GET Document List RAGFlow_A",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1696,
+        3168
+      ],
+      "id": "2850d609-f978-4079-932f-ad16adec1afb",
+      "name": "GET Document List RAGFlow_B",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "up_status",
+              "condition": "eq",
+              "keyValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1696,
+        3472
+      ],
+      "id": "34dab19f-563a-49c9-82dc-5bdd70cc0569",
+      "name": "GET Uploaded IDS From Buffer_B",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13d9d854-0c34-458e-97ff-555c268ff998",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GOOD API"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f65bc15c-360b-4aa9-95c7-755f428f025d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NO Dataset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c9fc25-dbb1-4fef-acbe-f728f58df058",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "Authentication error: API key is invalid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BAD API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -1488,
+        3136
+      ],
+      "id": "d5a8d07f-7222-41bc-a0e9-ae422dade4da",
+      "name": "API Badcall Ragflow Router1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"supa_docs\": {{ $json }}\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1184,
+        3472
+      ],
+      "id": "ffb46027-1d91-429a-8f22-d356991f8ef5",
+      "name": "PARSE Docs in Supabase1",
+      "retryOnFail": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1184,
+        3168
+      ],
+      "id": "0991025a-33b1-49cb-a43e-e10475a20720",
+      "name": "SPLIT Ragflow Docs1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "supa_docs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        3472
+      ],
+      "id": "f7147d93-0399-48c0-8f34-c98f536316b2",
+      "name": "Aggregate: Supabase1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -944,
+        3168
+      ],
+      "id": "9b8aa9cf-32f7-4ad4-bbdb-683feac22086",
+      "name": "Split RAGFlow Docs1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -784,
+        3248
+      ],
+      "id": "76bb9ee9-9772-4088-b2e8-24c3bb32fb66",
+      "name": "PARSE RAGFlow Docs1",
+      "retryOnFail": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "ragflow_docs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        3168
+      ],
+      "id": "5ed735ce-2930-4f4b-a76c-aba575be51a7",
+      "name": "Aggregate: RAGFlow1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -2320,
+        3168
+      ],
+      "id": "9ed0d1c0-01e1-47e8-81ce-1e257cffc609",
+      "name": "Wait1",
+      "webhookId": "dad3a147-cff4-4b68-bb38-50b5ea67d83c",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2128,
+        3296
+      ],
+      "id": "4a106d6c-fc62-4e37-a3e6-5c5eb3c0f441",
+      "name": "Merge_Timer",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1936,
+        3296
+      ],
+      "id": "99505fae-80ee-4101-925f-66588d2cb88e",
+      "name": "Wait2",
+      "webhookId": "dad3a147-cff4-4b68-bb38-50b5ea67d83c",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.code }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "0a629f4a-6c4c-4d89-9a89-d80d319bffa2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Successfull Processing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2b2f6931-1cbc-4616-bc40-e616b2dbd775",
+                    "leftValue": "={{ $json.code }}",
+                    "rightValue": 102,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No Doc IDS"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        7728,
+        1824
+      ],
+      "id": "98b164f4-7808-435b-adc6-ae35aeb87107",
+      "name": "Pross Router"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"Key\": \"{{ $json.Key.replace('CRC-NOI-bucket/', '') }}\", \n    \"Id\": \"{{ $json.Id }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        1264
+      ],
+      "id": "9f23edae-beb8-4175-905d-f9748462a9f9",
+      "name": "CLEAN Key",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        1216
+      ],
+      "id": "1b9026da-0b94-46d4-b866-92176d07d0a6",
+      "name": "Clean Keys Loop"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        6624,
+        1440
+      ],
+      "id": "140ccd56-9d32-43b6-9666-6eed88fe86e6",
+      "name": "UPDATE Up Ragflow",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a0578834-7ba5-4d06-9e3b-a8366ca18237",
+              "leftValue": "={{ $json.run }}",
+              "rightValue": "UNSTART",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6240,
+        1584
+      ],
+      "id": "85deca2c-125f-4872-9091-b633e4e6dfd7",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        6192,
+        1328
+      ],
+      "id": "f953bdda-e53b-4a73-86a9-ed9a69d2b60e",
+      "name": "LOOP Parser2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        5984,
+        1328
+      ],
+      "id": "df3b15c4-ca0d-4f5d-9601-f42d46570ac8",
+      "name": "SPLIT Ragflow UploadedDocs"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4880,
+        1520
+      ],
+      "id": "a642d6ae-821e-4b24-9d00-6d2dfdb9a3cb",
+      "name": "MERGE Doc Checker"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        5088,
+        1520
+      ],
+      "id": "740b986a-7845-450c-bbfb-37ca8c6cd453",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            },
+            {
+              "name": "Content-Type",
+              "value": "multipart/form-data"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5744,
+        1328
+      ],
+      "id": "b1812d5d-b355-40b5-ba77-9fe2e5702dc6",
+      "name": "POST Upload Docs to RAGFlow",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/authenticated/CRC-NOI-bucket/{{ $json.file_name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5504,
+        1328
+      ],
+      "id": "e9aa4f35-ea91-42db-9b9a-71b1cf86397a",
+      "name": "GET Documents from Suapabase",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1d153ef4-d062-404f-b8c6-3953a1c4736b",
+              "leftValue": "={{ $json.file_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c61ebb44-3b69-43d6-8220-5065638da2a9",
+              "leftValue": "={{ $json.ragflow_id }}",
+              "rightValue": "NULL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5264,
+        1520
+      ],
+      "id": "70865b88-7d0a-4033-ae4a-a1b818dbe089",
+      "name": "Supa-to-Rag-Selector"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"document_ids\": \"{{ $json.id }}\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6432,
+        1632
+      ],
+      "id": "f8fe5d75-f44b-4587-9639-edcae955d749",
+      "name": "PARSE id ragflow"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"file_name\": \"{{ $json.name }}\",\n  \"up_status\": \"uploaded\",\n  \"up_ragflow_status\": \"uploaded\",\n  \"ragflow_id\": \"{{ $json.id }}\",\n  \"pross_status\": \"pending\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6432,
+        1440
+      ],
+      "id": "6e334ea2-4efc-40b7-81c8-748e912adbeb",
+      "name": "PARSE Meta buffer"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        6832,
+        1632
+      ],
+      "id": "5f6a0283-92c4-48b7-857e-821de45ee003",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "content": "## RAGFlow and Spabase queries\n",
+        "height": 848,
+        "width": 3408
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        8000,
+        1696
+      ],
+      "typeVersion": 1,
+      "id": "858aeb36-7141-4a8f-a9d4-a94cf2ae1612",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8048,
+        1824
+      ],
+      "id": "df189906-9074-41f1-913c-8fd66636a7f8",
+      "name": "GET Document List RAGFlow_B1",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13d9d854-0c34-458e-97ff-555c268ff998",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GOOD API"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f65bc15c-360b-4aa9-95c7-755f428f025d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NO Dataset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c9fc25-dbb1-4fef-acbe-f728f58df058",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "Authentication error: API key is invalid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BAD API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        8304,
+        1808
+      ],
+      "id": "1dd55260-bffd-4a86-99be-b0e5f8e4f52e",
+      "name": "API Badcall Ragflow Router2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        8592,
+        1824
+      ],
+      "id": "a533cd01-53d1-4e93-a511-39cd471621f9",
+      "name": "SPLIT Ragflow Docs2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        8784,
+        1824
+      ],
+      "id": "6bd464f1-041f-4d37-8118-c0a2270bd868",
+      "name": "Split RAGFlow Docs2"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        9024,
+        1952
+      ],
+      "id": "2eaa363a-85c4-47c3-8b19-39ed69427500",
+      "name": "PARSE RAGFlow Docs2",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        9248,
+        1952
+      ],
+      "id": "203a5c7b-c096-455c-90ae-eba10f362af3",
+      "name": "UPDATE Up Ragflow1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.code }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "0a629f4a-6c4c-4d89-9a89-d80d319bffa2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Successfull Processing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2b2f6931-1cbc-4616-bc40-e616b2dbd775",
+                    "leftValue": "={{ $json.code }}",
+                    "rightValue": 102,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No Doc IDS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "16f8a2c7-a842-4353-a766-470f13d0a776",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Error Processing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        8784,
+        2080
+      ],
+      "id": "c86614fb-9a31-4660-bb3b-f3af27ba6ab5",
+      "name": "Pross Router1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        9024,
+        2128
+      ],
+      "id": "67deae70-b511-4d87-8249-be5d93aaf969",
+      "name": "PARSE RAGFlow Docs3",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        9024,
+        2320
+      ],
+      "id": "6719be1b-ee75-4227-8e23-155e87781bfa",
+      "name": "PARSE RAGFlow Docs4",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        9248,
+        2128
+      ],
+      "id": "4ef69f61-ac03-42f0-90eb-0bedd87637fc",
+      "name": "UPDATE Up Ragflow2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        9248,
+        2320
+      ],
+      "id": "de8feca2-0516-4f8f-b6d2-84dd6124dcc0",
+      "name": "UPDATE Up Ragflow3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        9488,
+        2320
+      ],
+      "id": "975c297b-c62c-4397-a20f-5a0eb7be9b4c",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9728,
+        1808
+      ],
+      "id": "a81fc7ae-7037-46b7-be26-be0b5a66b1e8",
+      "name": "GET Document List RAGFlow_B2",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13d9d854-0c34-458e-97ff-555c268ff998",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GOOD API"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f65bc15c-360b-4aa9-95c7-755f428f025d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NO Dataset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c9fc25-dbb1-4fef-acbe-f728f58df058",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "Authentication error: API key is invalid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BAD API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        9984,
+        1792
+      ],
+      "id": "2b4f6451-8651-4963-83c9-4a9eca2afc8a",
+      "name": "API Badcall Ragflow Router3"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        10272,
+        1808
+      ],
+      "id": "0a95f001-5028-4d1e-bc79-ae1f339cb6cd",
+      "name": "SPLIT Ragflow Docs3"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        10464,
+        1808
+      ],
+      "id": "41121deb-9e6a-45bc-99bd-4ab47cdcb937",
+      "name": "Split RAGFlow Docs3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10704,
+        1936
+      ],
+      "id": "b232de56-279e-4d07-afa9-8e7ba57c7c27",
+      "name": "PARSE RAGFlow Docs5",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        10928,
+        1936
+      ],
+      "id": "94d8703d-b000-4fa1-8a1d-8672aa7edd51",
+      "name": "UPDATE Up Ragflow4",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.code }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "0a629f4a-6c4c-4d89-9a89-d80d319bffa2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Successfull Processing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2b2f6931-1cbc-4616-bc40-e616b2dbd775",
+                    "leftValue": "={{ $json.code }}",
+                    "rightValue": 102,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No Doc IDS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "16f8a2c7-a842-4353-a766-470f13d0a776",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Error Processing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        10464,
+        2064
+      ],
+      "id": "800c1f2d-f126-4ddc-b3af-ddec134fe4b1",
+      "name": "Pross Router2"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10704,
+        2112
+      ],
+      "id": "d719b84d-fa50-4296-9a10-a311e88af38a",
+      "name": "PARSE RAGFlow Docs6",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ragflow_docs\": {\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n  }\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10704,
+        2304
+      ],
+      "id": "328c1a5e-f12b-4f05-b250-46ed5c17e478",
+      "name": "PARSE RAGFlow Docs7",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        10928,
+        2112
+      ],
+      "id": "a822b115-e5fd-4f0d-8f4a-95a38fe9c4e3",
+      "name": "UPDATE Up Ragflow5",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "={{ $json.up_ragflow_status }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "={{ $json.up_status }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.pross_status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        10928,
+        2304
+      ],
+      "id": "bc430c85-f90a-49ed-8143-92388b52a6c8",
+      "name": "UPDATE Up Ragflow6",
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        11168,
+        2304
+      ],
+      "id": "0c236de1-4ad5-4d62-a16b-eae11915c7db",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        9504,
+        1808
+      ],
+      "id": "00146b11-db1a-48f8-8606-508e32b3627e",
+      "name": "Wait3",
+      "webhookId": "d2d9d039-d1b5-45ef-85b7-86ac937af7fa"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.docs",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        2304
+      ],
+      "id": "e18eb83d-19c8-43a5-a136-1ccce4feeb68",
+      "name": "SPLIT Ragflow Docs4"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2416,
+        2304
+      ],
+      "id": "9709c066-4149-4441-bacd-3c3f219586d9",
+      "name": "Split RAGFlow Docs4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.processed }}",
+                    "rightValue": "DONE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0a629f4a-6c4c-4d89-9a89-d80d319bffa2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Processed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2b2f6931-1cbc-4616-bc40-e616b2dbd775",
+                    "leftValue": "={{ $json.processed }}",
+                    "rightValue": "UNSTART",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Unprocessed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "16f8a2c7-a842-4353-a766-470f13d0a776",
+                    "leftValue": "={{ $json.processed }}",
+                    "rightValue": "ERROR",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Error Processing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b98bc6f5-d130-4c4c-a449-d1391047981d",
+                    "leftValue": "={{ $json.processed }}",
+                    "rightValue": "RUNNING",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Processing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        2592,
+        2560
+      ],
+      "id": "e56137ba-3b40-4098-97b6-a91b83e38472",
+      "name": "Pross Router3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.name }}\", \n    \"ragflow_id\": \"{{ $json.id }}\",\n    \"processed\": \"{{ $json.run }}\",\n    \"processed_at\": \"{{ $json.process_begin_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.create_date }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2448,
+        2592
+      ],
+      "id": "6ab76e09-b2cd-476e-912f-297db244f1b2",
+      "name": "PARSE RAGFlow Docs11",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.file_name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ragflow_id",
+              "fieldValue": "={{ $json.ragflow_id }}"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "uploaded"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "pending"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "={{ $json.processed }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        2576
+      ],
+      "id": "d06933e4-5d58-43b3-8e38-cedc22e202ba",
+      "name": "UPDATE Pross Ragflow Buffer",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\", \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"processed\": \"error\",\n    \"processed_at\": \"{{ $json.processed_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.ragflow_creation_date }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3120,
+        2768
+      ],
+      "id": "09949ad0-539c-46dd-98ce-6689564fe216",
+      "name": "PARSE Error",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\", \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"processed\": \"done\",\n    \"processed_at\": \"{{ $json.processed_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.ragflow_creation_date }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3120,
+        2400
+      ],
+      "id": "85cec3b9-10b6-4aea-ab93-8fed5adcb3a0",
+      "name": "PARSE Processed",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\", \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"processed\": \"pending\",\n    \"processed_at\": \"{{ $json.processed_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.ragflow_creation_date }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3120,
+        2576
+      ],
+      "id": "02e30732-9dc4-4888-af11-cca18cb7e765",
+      "name": "PARSE Unprocessed",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\", \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\",\n    \"processed\": \"processing\",\n    \"processed_at\": \"{{ $json.processed_at }}\",\n    \"dataset_id\": \"{{ $json.dataset_id }}\",\n    \"ragflow_creation_date\": \"{{ $json.ragflow_creation_date }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3120,
+        2944
+      ],
+      "id": "ad2464e2-aada-4244-bb03-8d9f040437aa",
+      "name": "PARSE Processing",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "## RAGFlow and Spabase queries\n",
+        "height": 1024,
+        "width": 1744
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2112,
+        2208
+      ],
+      "typeVersion": 1,
+      "id": "c9edb66b-f16a-462d-831e-8796877bc252",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        2768
+      ],
+      "id": "309d0116-07be-4395-8a18-7497d93f5c4f",
+      "name": "No Operation, do nothing4"
+    },
+    {
+      "parameters": {
+        "content": "## Data ingestion mechanism (Google Drive):\n-document storage\n-metadata storage\n\n",
+        "height": 1040,
+        "width": 1792,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3904,
+        2208
+      ],
+      "typeVersion": 1,
+      "id": "44504d1d-8a93-4888-a833-111e9a01a881",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\", \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        2928
+      ],
+      "id": "920de93d-8ac4-400a-89c8-e47025246363",
+      "name": "PARSE RAGFlow Docs12",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "file_name",
+              "field2": "file_name"
+            }
+          ]
+        },
+        "resolve": "preferInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        3440,
+        2240
+      ],
+      "id": "64f87c47-e59e-4d41-bcc3-03b6740acd8f",
+      "name": "Compare Datasets"
+    },
+    {
+      "parameters": {
+        "content": "## RAGFlow and Spabase queries\n",
+        "height": 608,
+        "width": 736
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1344,
+        1808
+      ],
+      "typeVersion": 1,
+      "id": "f8214c2f-0f30-487d-9fa5-f625144d690b",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "buffer",
+        "returnAll": true,
+        "matchType": "allFilters"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        1936
+      ],
+      "id": "950a6d20-612f-4e3d-8545-9ff92d6e50e0",
+      "name": "GET Uploaded Files",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1648,
+        1936
+      ],
+      "id": "78186983-4abf-4a1f-9f93-a2880f5335ba",
+      "name": "Split RAGFlow Docs5"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"file_name\": \"{{ $json.file_name }}\", \n    \"ragflow_id\": \"{{ $json.ragflow_id }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1856,
+        2064
+      ],
+      "id": "d3d34611-2e69-4163-8e38-f1260727fc2e",
+      "name": "PARSE RAGFlow Docs8",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/authenticated/CRC-NOI-bucket/{{ $json.file_name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3984,
+        2560
+      ],
+      "id": "d0066b68-fdec-48ea-9a8c-eca5d65f36bf",
+      "name": "GET Documents from Suapabase1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/documents/{{ $json.ragflow_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3984,
+        2976
+      ],
+      "id": "330e0519-63bb-440b-bb29-2c6cb2ff6692",
+      "name": "GET Documents from RAGFlow",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/authenticated/CRC-NOI-bucket/{{ $json.file_name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3984,
+        2768
+      ],
+      "id": "4eb11185-0cf6-436b-acc9-8491e05c6495",
+      "name": "GET Documents from Suapabase2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/authenticated/CRC-NOI-bucket/{{ $json.file_name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3984,
+        2352
+      ],
+      "id": "db1f2cf2-b600-465f-9dce-ea6f7ab29d5a",
+      "name": "GET Documents from Suapabase3",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://erucdhreevjndujivweu.supabase.co/storage/v1/object/CRC-NOI-bucket/{{$binary.data.fileName}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydWNkaHJlZXZqbmR1aml2d2V1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODU3MDI2MywiZXhwIjoyMDc0MTQ2MjYzfQ.QVsdSiYAMFTF3PyWDaOQCf3H5UND3s2lJBdr-VcgPSg"
+            },
+            {
+              "name": "content-type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4272,
+        2976
+      ],
+      "id": "c18950e3-a1c0-417e-8995-0d5799903057",
+      "name": "Upload to Supabase3",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Key }}",
+                    "rightValue": "=duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "17fb6449-d5d2-4f68-8888-7884b90b90a3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "upload_success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd1382d7-2cff-44dc-8c6c-1dee9c6376b5",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "The resource already exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3502a29-7273-4d30-9fca-874bafe0e342",
+                    "leftValue": "={{ $json.error.status }}",
+                    "rightValue": 400,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47c67f74-c567-4dcd-b934-c3b87ee04abf",
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "The resource already exists"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        4464,
+        2944
+      ],
+      "id": "4bb2495b-3afc-4a74-addc-3df7d63c22b8",
+      "name": "Upload to buffer switch3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"Key\": \"{{ $json.Key.replace('CRC-NOI-bucket/', '') }}\", \n    \"Id\": \"{{ $json.Id }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4960,
+        3008
+      ],
+      "id": "e2e73806-27a7-4bdc-a0e4-da4e8e405dea",
+      "name": "CLEAN Key1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4752,
+        2944
+      ],
+      "id": "b478cb28-e78f-47ce-bc1b-777c2df8a0b8",
+      "name": "Clean Keys Loop1"
+    },
+    {
+      "parameters": {
+        "tableId": "buffer",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "up_status",
+              "fieldValue": "=uploaded"
+            },
+            {
+              "fieldId": "file_name",
+              "fieldValue": "={{ $json.Key }}"
+            },
+            {
+              "fieldId": "supabase_key",
+              "fieldValue": "={{ $json.Id }}"
+            },
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "done"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5168,
+        3008
+      ],
+      "id": "30cab4c7-b1eb-4413-a0f5-dda659884040",
+      "name": "UPDATE Up Status",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "MjZAsSWQ2WPHhvC7",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://unsaltatory-tinisha-visionally.ngrok-free.dev/api/v1/datasets/dc8d13caa2d211f0921e36bf8e6cac5d/chunks",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-YwYjFjZjJjYTJkNTExZjBhMmMxMzZiZj"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "document_ids",
+              "value": "={{ $json.ragflow_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2896,
+        2576
+      ],
+      "id": "d16f8b0f-c4ac-469e-8aaf-ce1ecb0d765f",
+      "name": "POST Activate RAGFlow1",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch": {
+      "main": [
+        [
+          {
+            "node": "Clean Keys Loop",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Uploaded Files",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET UnUploaded IDS From Buffer_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Uploaded Files",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET UnUploaded IDS From Buffer_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow_A",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Insert Buffer Record: Upload": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET UnUploaded IDS From Buffer_A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow_A",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Failed": {
+      "main": [
+        [
+          {
+            "node": "Insert Error Buffer Record: Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Error Buffer Record: Pending": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ENV_VARIABLES": {
+      "main": [
+        [
+          {
+            "node": "GET Document List RAGFlow_A",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET UnUploaded IDS From Buffer_A": {
+      "main": [
+        [
+          {
+            "node": "PARSE Docs in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Fetch Errors Supabase": {
+      "main": [
+        [
+          {
+            "node": "Almacenar errores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Fetch Errors Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Almacenar errores1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Almacenar errores": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Almacenar errores1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "parse Errores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse Errores": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Trigger Mecanismo de Reparacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Switch DB Query Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch1": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Upload1": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Download file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file2": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch2": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Buffer Record: Upload2": {
+      "main": [
+        [
+          {
+            "node": "GET Unprocessed IDS From Buffer2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase2": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Activate RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "Pross Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "API Badcall Ragflow Router": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow Docs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SPLIT Ragflow Docs4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        []
+      ]
+    },
+    "Split RAGFlow Docs": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow Docs": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Docs in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE Doc Queries": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate: RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Queries",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Aggregate: Supabase": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Supa Docs": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch DB Query Router": {
+      "main": [
+        [
+          {
+            "node": "Supa_Data_Checker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ragf_Data_Checker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supa_Data_Checker": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Supa Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ragf_Data_Checker": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragf Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Supa Names": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragf Docs": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Checker",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Existence Conditions  RAGF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser1": {
+      "main": [
+        [
+          {
+            "node": "MERGE Doc Checker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Existence Conditions  Supa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Existence Conditions  Supa": {
+      "main": [
+        [
+          {
+            "node": "PARSE Supa Names",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Existence Conditions  RAGF": {
+      "main": [
+        [
+          {
+            "node": "PARSE Ragf Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Ragf Docs": {
+      "main": [
+        [
+          {
+            "node": "Pross Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pross Status": {
+      "main": [
+        [
+          {
+            "node": "PARSE Processing State",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LOOP Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Processing State": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "POST Activate RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Document List RAGFlow_A": {
+      "main": [
+        [
+          {
+            "node": "API Badcall Ragflow Router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Synch RAGFlow  Schedule": {
+      "main": [
+        [
+          {
+            "node": "Merge_Timer",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "GET Document List RAGFlow_B": {
+      "main": [
+        [
+          {
+            "node": "API Badcall Ragflow Router1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Uploaded IDS From Buffer_B": {
+      "main": [
+        [
+          {
+            "node": "PARSE Docs in Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Badcall Ragflow Router1": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Docs in Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow Docs1": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split RAGFlow Docs1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: RAGFlow1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs1": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Merge_Timer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge_Timer": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "GET Document List RAGFlow_B",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Uploaded IDS From Buffer_B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pross Router": {
+      "main": [
+        [
+          {
+            "node": "GET Document List RAGFlow_B1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CLEAN Key": {
+      "main": [
+        [
+          {
+            "node": "Clean Keys Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean Keys Loop": {
+      "main": [
+        [
+          {
+            "node": "Insert Buffer Record: Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CLEAN Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "PARSE id ragflow",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PARSE Meta buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP Parser2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow UploadedDocs": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERGE Doc Checker": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Supa-to-Rag-Selector",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Upload Docs to RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow UploadedDocs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Documents from Suapabase": {
+      "main": [
+        [
+          {
+            "node": "POST Upload Docs to RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supa-to-Rag-Selector": {
+      "main": [
+        [
+          {
+            "node": "GET Documents from Suapabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LOOP Parser3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE id ragflow": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Meta buffer": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "LOOP Parser2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Document List RAGFlow_B1": {
+      "main": [
+        [
+          {
+            "node": "API Badcall Ragflow Router2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Badcall Ragflow Router2": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow Docs2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow Docs2": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split RAGFlow Docs2": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pross Router1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs2": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pross Router1": {
+      "main": [
+        [
+          {
+            "node": "PARSE RAGFlow Docs2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs3": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs4": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow2": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow3": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing1": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Document List RAGFlow_B2": {
+      "main": [
+        [
+          {
+            "node": "API Badcall Ragflow Router3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Badcall Ragflow Router3": {
+      "main": [
+        [
+          {
+            "node": "SPLIT Ragflow Docs3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow Docs3": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split RAGFlow Docs3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Pross Router2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs5": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow4": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pross Router2": {
+      "main": [
+        [
+          {
+            "node": "PARSE RAGFlow Docs5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs6": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs7": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Ragflow6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow5": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Ragflow6": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing2": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "GET Document List RAGFlow_B2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SPLIT Ragflow Docs4": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split RAGFlow Docs4": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pross Router3": {
+      "main": [
+        [
+          {
+            "node": "PARSE Processed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "POST Activate RAGFlow1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs11": {
+      "main": [
+        [
+          {
+            "node": "Pross Router3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Pross Ragflow Buffer": {
+      "main": [
+        []
+      ]
+    },
+    "PARSE Error": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Pross Ragflow Buffer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "No Operation, do nothing4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Processed": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Pross Ragflow Buffer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "No Operation, do nothing4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Unprocessed": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Pross Ragflow Buffer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "No Operation, do nothing4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE Processing": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Pross Ragflow Buffer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "No Operation, do nothing4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing4": {
+      "main": [
+        [
+          {
+            "node": "PARSE RAGFlow Docs12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs12": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Uploaded Files": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split RAGFlow Docs5": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PARSE RAGFlow Docs8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PARSE RAGFlow Docs8": {
+      "main": [
+        [
+          {
+            "node": "Split RAGFlow Docs5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Datasets": {
+      "main": [
+        [
+          {
+            "node": "GET Documents from Suapabase3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET Documents from Suapabase1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET Documents from Suapabase2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GET Documents from RAGFlow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Documents from RAGFlow": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase3": {
+      "main": [
+        [
+          {
+            "node": "Upload to buffer switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CLEAN Key1": {
+      "main": [
+        [
+          {
+            "node": "UPDATE Up Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean Keys Loop1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "CLEAN Key1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to buffer switch3": {
+      "main": [
+        [
+          {
+            "node": "Clean Keys Loop1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Activate RAGFlow1": {
+      "main": [
+        [
+          {
+            "node": "PARSE Unprocessed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE Up Status": {
+      "main": [
+        [
+          {
+            "node": "Clean Keys Loop1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "13c2e9e2-9756-42c5-aa07-544dbe655787",
+  "meta": {
+    "instanceId": "61f78869dc0b0a74cc393ddba302cbb1cc5ddbc8fa3d35afd61eb4be3ead72f1"
+  },
+  "id": "mpvVYaR2wGCO40xv",
+  "tags": []
+}
