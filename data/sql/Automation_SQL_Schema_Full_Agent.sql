@@ -155,7 +155,7 @@ create table if not exists knowledgebase (
     id varchar(32) primary key not null,          
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     --------
     tenant_id varchar(32) not null,               
     name varchar(128) not null,                  
@@ -199,7 +199,7 @@ create table if not exists document (
     id varchar(32) primary key not null,  
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     --------            
     thumbnail text null,                             
     kb_id varchar(32) not null,                     
@@ -215,7 +215,7 @@ create table if not exists document (
     chunk_num int default 0,                       
     progress float default 0,                        
     progress_msg text null default '',            
-    process_begin_at datetime null,               
+    process_begin_at timestamp null,               
     process_duration float default 0,            
     meta_fields text null default '{}',            
     suffix varchar(32) not null,                    
@@ -249,7 +249,7 @@ create table if not exists file (
     id varchar(32) primary key not null, 
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     ---         
     parent_id varchar(32) not null,               
     tenant_id varchar(32) not null,               
@@ -262,14 +262,14 @@ create table if not exists file (
 );
 
 -- Indexes for file table
-create index idx_file_parent_id ON file (parent_id);
-create index idx_file_tenant_id ON file (tenant_id);
-create index idx_file_created_by ON file (created_by);
-create index idx_file_name ON file (name);
-create index idx_file_location ON file (location);
-create index idx_file_size ON file (size);
-create index idx_file_type ON file (type);
-create index idx_file_source_type ON file (source_type);
+create index idx_file_parent_id on file (parent_id);
+create index idx_file_tenant_id on file (tenant_id);
+create index idx_file_created_by on file (created_by);
+create index idx_file_name on file (name);
+create index idx_file_location on file (location);
+create index idx_file_size on file (size);
+create index idx_file_type on file (type);
+create index idx_file_source_type on file (source_type);
 
 
 -- -------------------------------------------------------------------------------------
@@ -280,7 +280,7 @@ create table if not exists file2document (
     id varchar(32) primary key not null,         
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     --- 
     file_id varchar(32) null,                     
     document_id varchar(32) null                 
@@ -301,14 +301,14 @@ create table if not exists task (
     id varchar(32) PRIMARY KEY not null,  
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     ---         
     doc_id varchar(32) not null,                  
     from_page int default 0,                    
     to_page int default 100000000,                
     task_type varchar(32) not null default '',    
     priority int default 0,                      
-    begin_at datetime null,                       
+    begin_at timestamp null,                       
     process_duration float default 0,            
     progress float default 0,                     
     progress_msg text null default '',            
@@ -332,7 +332,7 @@ create table if not exists dialog (
     id varchar(32) primary key NOT null,    
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     ---        
     tenant_id varchar(32) NOT null,               
     name varchar(255) null,                      
@@ -355,11 +355,11 @@ create table if not exists dialog (
 );
 
 -- Indexes for dialog table
-create index idx_dialog_tenant_id ON dialog (tenant_id);
-create index idx_dialog_name ON dialog (name);
-create index idx_dialog_language ON dialog (language);
-create index idx_dialog_prompt_type ON dialog (prompt_type);
-create index idx_dialog_status ON dialog (status);
+create index idx_dialog_tenant_id on dialog (tenant_id);
+create index idx_dialog_name on dialog (name);
+create index idx_dialog_language on dialog (language);
+create index idx_dialog_prompt_type on dialog (prompt_type);
+create index idx_dialog_status on dialog (status);
 
 
 -- -------------------------------------------------------------------------------------
@@ -370,12 +370,12 @@ create table if not exists conversation (
     id varchar(32) primary key not null,
     --timing
     create_date timestamp default now(),
-    update_date timestamp default now()
+    update_date timestamp default now(),
     ---            
     dialog_id varchar(32) not null,               
     name varchar(255) null,                       
     message text null,                            
-    reference text null DEFAULT '[]',             
+    reference text null default '[]',             
     user_id varchar(255) null                     
 );
 
@@ -384,7 +384,29 @@ create index idx_conv_dialog_id on conversation (dialog_id);
 create index idx_conv_name on conversation (name);
 create index idx_conv_user_id on conversation (user_id);
 
+-- -------------------------------------------------------------------------------------
+-- TABLE: users
+-- Stores the registered users in the current ragflow image
+-- -------------------------------------------------------------------------------------
 
+create table if not exists users (
+  id varchar(32) primary key not null,
+  --timing
+  create_date timestamp default now(),
+  update_date timestamp default now(),
+  ---   
+  access_token varchar(255),
+  nickname varchar(100),
+  password varchar(255),
+  email varchar(255),
+  timezone varchar(64),
+  last_login_time timestamp,
+  is_authenticated varchar(1),
+  is_active varchar(1),
+  is_anonymous varchar(1),
+  status varchar(1),
+  is_superuser int
+);
 
 -- -------------------------------------------------------------------------------------
 -- DEFINITION OF FOREIGN KEYS
@@ -432,27 +454,83 @@ on delete cascade; -- Optional: delete conversations if the dialog is deleted.
 ------------------------------------------------------- Ragflow native development (Vector Store)-------------------------------------------------------
 --======================================================================================================================================================
 
--- =====================================================================================
--- Translation of RAGFlow Relational Schema (Python ORM to SQL)
--- Based on Knowledgebase, Document, File, File2Document, Task, Dialog, and Conversation models.
--- =====================================================================================
+-- -------------------------------------------------------------------------------------
+-- TABLE: tenant_llm
+-- Defines metadata related with the AVAILABLE llm and embeding models for the ragflow engine
+-- -------------------------------------------------------------------------------------
+create table if not exists tenant_llm(
+  tenant_id varchar(32) not null primary key, 
+  --timing
+  create_date timestamp default now(),
+  update_date timestamp default now(),
+  ---    
+  llm_factory varchar(128),
+  model_type varchar(128),
+  llm_name varchar(128),
+  api_key text,
+  max_tokens int,
+  used_tokens int
+);
+
+-- foreign key
+alter table tenant_llm
+add constraint fk_tenant_llm_tenant_id  
+foreign key (tenant_id)                 
+references tenant (id)                 
+on delete cascade;
+
+-- -------------------------------------------------------------------------------------
+-- TABLE: tenant
+-- Defines metadata related with the USED llm and embeding models for the ragflow engine
+-- -------------------------------------------------------------------------------------
+create table if not exists tenant(
+  id varchar(32) primary key, 
+  --timing
+  create_date timestamp default now(),
+  update_date timestamp default now(),
+  ---    
+  name varchar(32),
+  llm_id varchar(128), 
+  embd_id varchar(128),
+  asr_id varchar(128),
+  img2txt_id varchar(128),
+  rerank_id varchar(128),
+  tts_id varchar(256),
+  parser_ids varchar(256),
+  credit int,
+  status varchar (1)  
+);
 
 -- -------------------------------------------------------------------------------------
 -- TABLE: embedding_ragflow
 -- Defines the vector store generated by ragflow
 -- -------------------------------------------------------------------------------------
 
-create table if not exists embeddings_ragflow(
+create table if not exists embeddings_ragflow (
   chunk_id varchar(32) primary key not null,
-  chunk_text varchar(32) not null default 'NULL',
+  chunk_text text not null default 'NULL',
   db_ragflow_id  varchar(32) not null, 
   document_id varchar(32) not null,
-  document_name varchar(64) not null,
+  document_name varchar(255) not null,
   metadata jsonb not null, 
   embedding vector(768),
-  llm_id varchar(32)
+  embd_id varchar(32)
 );
 
-create index idx_chunk_id ON embeddings_ragflow (chunk_id);
-create index idx_db_ragflow_id ON embeddings_ragflow (db_ragflow_id);
-create index idx_document_id ON embeddings_ragflow (document_id);
+create index idx_chunk_id on embeddings_ragflow (chunk_id);
+create index idx_db_ragflow_id on embeddings_ragflow (db_ragflow_id);
+create index idx_document_id on embeddings_ragflow (document_id);
+
+-- foreign key
+alter table embeddings_ragflow
+add constraint fk_embeddings_knowledgebase
+foreign key (db_ragflow_id)
+references knowledgebase(id)
+on delete cascade;
+
+alter table embeddings_ragflow
+add constraint fk_document_id
+foreign key (document_id)
+references document(id)
+on delete cascade;
+
