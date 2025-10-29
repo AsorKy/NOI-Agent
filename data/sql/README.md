@@ -224,3 +224,19 @@ PARA OBTENER LA TUPLA CHUNKID_EMBEDDING, EMPLEE EL SIGUIENTE GET
 '
 
     ```
+
+
+```bash
+    ----------------------------------listar todos los documentos de un dataset------------------------------------
+# Reemplaza 'infini_rag_flow' con tu contraseña y el nombre del índice si es diferente
+curl -u elastic:infini_rag_flow -X GET "http://localhost:1200/ragflow_b5084770aec111f0a7d77e0facf24888/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": { 
+    "match_all": {}  // Selecciona todos los documentos en el índice
+  },
+  "_source": ["doc_id", "docnm_kwd", "content_ltks", "embedding_768_vec"], // Campos a mostrar (ajusta el nombre del embedding si es necesario)
+  "size": 1000         // Número máximo de documentos a devolver (aumenta si tienes más)
+}
+'
+
+```
