@@ -44,9 +44,11 @@ create table if not exists n8n_databases(
 ------------------------
 create table if not exists document_metadata(
   --id uuid primary key default gen_random_uuid(),
-  document_id text primary key not null,
+  document_id text primary key not null,  -- id in google drive
+  supabase_id varchar(32),
   ragflow_id text not null default 'NULL',
   database_id uuid,  
+  ragflow_db_id varchar(32),
   document_name text not null default 'NULL',
   document_url text not null default 'NULL',
   document_type text check(document_type in ('well_history', 'reports', 'submittion', 'resubmittion', 'analytics', 'other')) default 'other',
@@ -73,6 +75,7 @@ create table if not exists buffer (
   file_name text default 'NULL',
   up_status text check (up_status in ('uploaded', 'pending', 'failed', 'deleted')) default 'pending',
   up_drive_status text check (up_drive_status in ('uploaded', 'pending', 'failed', 'deleted')) default 'pending',
+  up_ragflow_status varcahr(32) check (up_ragflow_status in ('uploaded', 'pending', 'failed', 'deleted')) default 'pending',
   pross_status text check (pross_status in ('pending', 'processing', 'done', 'error')) default 'pending',
   created_at timestamp with time zone default now(),
   last_updated timestamp with time zone default now(),
