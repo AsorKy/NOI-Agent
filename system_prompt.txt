@@ -81,5 +81,3 @@ Provide me with the following information from the document "Invoice_5934.pdf":
 -Amount 
 -Work Description
 -Work Location
-
-

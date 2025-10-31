@@ -1,0 +1,9 @@
+NOI DISCERNING TASKS
+
+- Identificación de eventos de perforación y no perforación
+- Clasificación de eventos de perforación en intension y daily report
+- Identificación de fechas a cada evento
+- Separacion de tuplas evento-fecha a partir de los notice of intention
+- Identificacion e ID de poso por evento-notice
+- Sumarización tecnica de cada notice y cada intervencion efectiva
+- Identificacion de permits
