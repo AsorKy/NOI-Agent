@@ -47,7 +47,7 @@
             {
               "keyName": "ragflow_id",
               "condition": "eq",
-              "keyValue": "={{ $json.id }}"
+              "keyValue": "={{ $json.ragflow_id }}"
             }
           ]
         }
@@ -78,7 +78,7 @@
             {
               "keyName": "ragflow_id",
               "condition": "eq",
-              "keyValue": "={{ $json.id }}"
+              "keyValue": "={{ $json.ragflow_id }}"
             }
           ]
         }
@@ -284,7 +284,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n    \"id\":\"{{ $json.id }}\"\n}\n",
+        "jsonOutput": "={\n    \"ragflow_id\":\"{{ $json.id }}\"\n}\n",
         "options": {
           "dotNotation": false
         }
@@ -499,20 +499,6 @@
       "name": "No Operation, do nothing"
     },
     {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        1712,
-        -1040
-      ],
-      "id": "0dfdc4c8-d398-49d7-af77-27a6e3ce1f39",
-      "name": "Execute Elasticsearch Migration",
-      "disabled": true
-    },
-    {
       "parameters": {},
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
@@ -522,20 +508,6 @@
       ],
       "id": "1cc1f35e-9631-4d6e-a372-ac71ae864f5c",
       "name": "Merge"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        1712,
-        -608
-      ],
-      "id": "0dd4b6a4-71e1-4f4d-969a-2b993652cc49",
-      "name": "Execute Minio Migration",
-      "disabled": true
     },
     {
       "parameters": {
@@ -952,33 +924,6 @@
     },
     {
       "parameters": {
-        "url": "=https://noncotyledonous-irreclaimable-elian.ngrok-free.dev/api/v1/datasets/{{ $json.ragflow_db_id }}/documents",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer ragflow-JiOWRhOTQ4YjQxNzExZjBiNzM0NGFkY2"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -3456,
-        -768
-      ],
-      "id": "a6fafc8d-5c6d-4591-92f2-9d88de0a2159",
-      "name": "GET Document List RAGFlow_A1",
-      "alwaysOutputData": true,
-      "retryOnFail": true,
-      "maxTries": 5,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
         "rules": {
           "values": [
             {
@@ -1060,8 +1005,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -2192,
-        -832
+        -2096,
+        -560
       ],
       "id": "07dfd24b-604b-4f68-9e3b-af1a75736c9a",
       "name": "Processing Router"
@@ -1082,7 +1027,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 'items' ES AHORA tu lista de documentos (los 15 items de tu ejemplo).\n// Ya no necesitas 'items[0].json.data.docs'.\n\n// 1. Usamos .map() para transformar la lista de documentos\n//    en una nueva lista de items para n8n.\nconst outputItems = items.map(item => {\n  \n  // 'item.json' es un documento individual de la lista\n  // (ej: { \"id\": \"68fa7...-\", \"status\": 1, ... })\n  \n  // 2. Extraemos el ID de ese documento\n  const doc_id = item.json.id;\n\n  // 3. Devolvemos el nuevo objeto solo con el id\n  return {\n    json: {\n      id: doc_id\n      // Puedes renombrarlo si quieres:\n      // document_id: doc_id\n    }\n  };\n});\n\n// 4. Devolvemos la nueva lista (15 items, cada uno solo con un ID)\nreturn outputItems;"
+        "jsCode": "// 'items' ES AHORA tu lista de documentos (los 15 items de tu ejemplo).\n// Ya no necesitas 'items[0].json.data.docs'.\n\n// 1. Usamos .map() para transformar la lista de documentos\n//    en una nueva lista de items para n8n.\nconst outputItems = items.map(item => {\n  \n  // 'item.json' es un documento individual de la lista\n  // (ej: { \"id\": \"68fa7...-\", \"status\": 1, ... })\n  \n  // 2. Extraemos el ID de ese documento\n  const doc_id = item.json.id;\n\n  // 3. Devolvemos el nuevo objeto solo con el id\n  return {\n    json: {\n      //id: doc_id\n      ragflow_id : doc_id\n      // Puedes renombrarlo si quieres:\n      // document_id: doc_id\n    }\n  };\n});\n\n// 4. Devolvemos la nueva lista (15 items, cada uno solo con un ID)\nreturn outputItems;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1096,6 +1041,7 @@
     },
     {
       "parameters": {
+        "content": "## Database ID GET\n",
         "height": 1408,
         "width": 1456
       },
@@ -1133,8 +1079,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1968,
-        256
+        -1760,
+        240
       ],
       "typeVersion": 1,
       "id": "8e0f9b9d-184e-4b07-baf0-379cc1973a01",
@@ -1147,8 +1093,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -1872,
-        336
+        -1664,
+        320
       ],
       "id": "17274356-e496-456a-aaf4-cb5c1b66a1c9",
       "name": "Execute Ragflow Processing Pipeline",
@@ -1163,8 +1109,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1968,
-        -304
+        -1760,
+        -320
       ],
       "typeVersion": 1,
       "id": "08cca323-ed72-448c-a95f-50a1f454d541",
@@ -1197,8 +1143,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1872,
-        -208
+        -1664,
+        -224
       ],
       "id": "9e2a4cd2-f3b2-4bfd-9e20-595e1e948d67",
       "name": "If_Failed"
@@ -1210,8 +1156,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -1088,
-        -224
+        -880,
+        -240
       ],
       "id": "5f013c4a-eaa0-4114-8a8c-2003968c1e8e",
       "name": "Execute Failed With Chunks",
@@ -1224,8 +1170,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -1504,
-        -16
+        -1296,
+        -32
       ],
       "id": "270bb9f2-9265-4873-a943-c2cb8845ba7a",
       "name": "Execute Failed Without Chunks",
@@ -1238,8 +1184,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -480,
-        -224
+        -272,
+        -240
       ],
       "id": "56a74e8a-1997-474b-9b47-dfaebc4605fc",
       "name": "Execute Buffer Registering",
@@ -1252,8 +1198,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -1088,
-        -16
+        -880,
+        -32
       ],
       "id": "f2acad29-ba7d-45e7-9d45-6b178930981e",
       "name": "Execute Buffer Registering1",
@@ -1268,8 +1214,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1168,
-        -272
+        -960,
+        -288
       ],
       "typeVersion": 1,
       "id": "f90ff89d-cd60-4eb7-878d-6c128e25feba",
@@ -1335,11 +1281,12 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -3664,
+        -3952,
         -768
       ],
       "id": "0e1f3536-faac-4986-8011-b98f1d57a36b",
-      "name": "Merge_0"
+      "name": "Merge_0",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1512,71 +1459,11 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -304,
+        -64,
         -592
       ],
       "id": "4947cf97-1b88-4200-b9a8-6c3f25a3c7ef",
       "name": "Merge_4_Combine"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        1680,
-        -1840
-      ],
-      "id": "57642628-2a8e-412e-a684-320da1f25968",
-      "name": "Execute Check if Minio is Migrated",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        1680,
-        -1616
-      ],
-      "id": "9fec7356-4cca-4023-b3d5-b7bd1716a227",
-      "name": "Execute Check if Elasticsearch is Migrated",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "content": "## Minio - Elasticsearch Migration\n",
-        "height": 736,
-        "width": 432,
-        "color": 7
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1536,
-        -1152
-      ],
-      "typeVersion": 1,
-      "id": "70daac39-807f-42c9-9f32-ef3cc5e1e784",
-      "name": "Sticky Note6"
-    },
-    {
-      "parameters": {
-        "content": "## Minio - Elasticsearch Migration\n",
-        "height": 544,
-        "width": 432,
-        "color": 7
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1536,
-        -1920
-      ],
-      "typeVersion": 1,
-      "id": "3135bd55-888d-4b4a-b43e-7922bb4bdd62",
-      "name": "Sticky Note7"
     },
     {
       "parameters": {
@@ -1765,930 +1652,162 @@
       ],
       "id": "d4e561d4-26ed-40fd-b331-abecb89eb53a",
       "name": "Merge_5_Comine2"
+    },
+    {
+      "parameters": {
+        "url": "=https://noncotyledonous-irreclaimable-elian.ngrok-free.dev/api/v1/datasets/{{ $json.ragflow_db_id }}/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-JiOWRhOTQ4YjQxNzExZjBiNzM0NGFkY2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3456,
+        -768
+      ],
+      "id": "a6fafc8d-5c6d-4591-92f2-9d88de0a2159",
+      "name": "GET Document List RAGFlow_A1",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ragflow_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.ragflow_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "pross_status",
+              "fieldValue": "done"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        -1552
+      ],
+      "id": "479f9289-e721-4f29-af3b-62a54d28c2cd",
+      "name": "Update a buffer_pross_status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "vHqrEKE3qat7hcu9",
+          "name": "Supabase account_NOI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1696,
+        -2336
+      ],
+      "id": "57642628-2a8e-412e-a684-320da1f25968",
+      "name": "Execute Check if Minio is Migrated",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Minio - Elasticsearch Migration\n",
+        "height": 544,
+        "width": 432,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        -2416
+      ],
+      "typeVersion": 1,
+      "id": "3135bd55-888d-4b4a-b43e-7922bb4bdd62",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1696,
+        -2112
+      ],
+      "id": "9fec7356-4cca-4023-b3d5-b7bd1716a227",
+      "name": "Execute Check if Elasticsearch is Migrated",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1712,
+        -608
+      ],
+      "id": "0dd4b6a4-71e1-4f4d-969a-2b993652cc49",
+      "name": "Execute Minio Migration",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Minio - Elasticsearch Migration\n",
+        "height": 736,
+        "width": 432,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1536,
+        -1152
+      ],
+      "typeVersion": 1,
+      "id": "70daac39-807f-42c9-9f32-ef3cc5e1e784",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1712,
+        -1040
+      ],
+      "id": "0dfdc4c8-d398-49d7-af77-27a6e3ce1f39",
+      "name": "Execute Elasticsearch Migration",
+      "disabled": true
     }
   ],
   "pinData": {
-    "Update a DB metadata dates": [
-      {
-        "json": {
-          "id": "cd146be5-e99b-4c12-b2c0-cc04e659709a",
-          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-          "db_name": "Invoices-test-1",
-          "db_type": "well_history",
-          "created_at": "2025-10-22T23:32:44+00:00",
-          "last_updated": "2025-10-28T22:33:42+00:00",
-          "current_status": "active_info"
-        }
-      }
-    ],
-    "GET Document List RAGFlow_A1": [
-      {
-        "json": {
-          "code": 0,
-          "data": {
-            "docs": [
-              {
-                "chunk_count": 0,
-                "chunk_method": "presentation",
-                "create_date": "Sat, 01 Nov 2025 03:23:05 GMT",
-                "create_time": 1761938585351,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "0304baceb68f11f0ae0026f0e470aa0d",
-                "location": "CRC_agent_pilot_review.pptx",
-                "meta_fields": {},
-                "name": "CRC_agent_pilot_review.pptx",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": "",
-                "process_begin_at": null,
-                "process_duration": 0,
-                "progress": 0,
-                "progress_msg": "",
-                "run": "UNSTART",
-                "size": 3474587,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pptx",
-                "thumbnail": "thumbnail_0304baceb68f11f0ae0026f0e470aa0d.png",
-                "title": null,
-                "token_count": 0,
-                "type": "doc",
-                "update_date": "Sat, 01 Nov 2025 03:23:05 GMT",
-                "update_time": 1761938585352
-              },
-              {
-                "chunk_count": 4,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:08 GMT",
-                "create_time": 1761147188158,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68fa73d0af5c11f0820b0a72fe6824b7",
-                "location": "2429_DTOP_KB.pdf",
-                "meta_fields": {},
-                "name": "2429_DTOP_KB.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.2788,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 299474,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 200,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623279
-              },
-              {
-                "chunk_count": 3,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:08 GMT",
-                "create_time": 1761147188137,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68f746d8af5c11f0820b0a72fe6824b7",
-                "location": "S9893767 WE 070624.pdf",
-                "meta_fields": {},
-                "name": "S9893767 WE 070624.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.26101,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 155379,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 862,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623262
-              },
-              {
-                "chunk_count": 4,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:08 GMT",
-                "create_time": 1761147188116,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68f406e4af5c11f0820b0a72fe6824b7",
-                "location": "S9827093WK04_27_2024.pdf",
-                "meta_fields": {},
-                "name": "S9827093WK04_27_2024.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.2428,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 181836,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 1039,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623243
-              },
-              {
-                "chunk_count": 4,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:08 GMT",
-                "create_time": 1761147188080,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68ee7878af5c11f0820b0a72fe6824b7",
-                "location": "Invoice_42024_from_Lean_Staffing_Solutions.pdf",
-                "meta_fields": {},
-                "name": "Invoice_42024_from_Lean_Staffing_Solutions.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.22355,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 42334,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 390,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623223
-              },
-              {
-                "chunk_count": 2,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:08 GMT",
-                "create_time": 1761147188052,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68ea3f24af5c11f0820b0a72fe6824b7",
-                "location": "Invoice_5934.pdf",
-                "meta_fields": {},
-                "name": "Invoice_5934.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.20198,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 31812,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 395,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623203
-              },
-              {
-                "chunk_count": 4,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:08 GMT",
-                "create_time": 1761147188021,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68e58dc6af5c11f0820b0a72fe6824b7",
-                "location": "Invoice 41264.pdf",
-                "meta_fields": {},
-                "name": "Invoice 41264.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.17833,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 42105,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 356,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623178
-              },
-              {
-                "chunk_count": 3,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187995,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68e18730af5c11f0820b0a72fe6824b7",
-                "location": "Invoice #13 - BV Tulare Air Sands.pdf",
-                "meta_fields": {},
-                "name": "Invoice #13 - BV Tulare Air Sands.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:38 GMT",
-                "process_duration": 5.16684,
-                "progress": 1,
-                "progress_msg": "09:43:38  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 207232,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 458,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623167
-              },
-              {
-                "chunk_count": 9,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187973,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68de3c56af5c11f0820b0a72fe6824b7",
-                "location": "Inv_114643_from_Avadine_9468.pdf",
-                "meta_fields": {},
-                "name": "Inv_114643_from_Avadine_9468.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.15787,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 79313,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 1929,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623158
-              },
-              {
-                "chunk_count": 29,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187951,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68dae754af5c11f0820b0a72fe6824b7",
-                "location": "Inv_113246_from_Avadine_19500.pdf",
-                "meta_fields": {},
-                "name": "Inv_113246_from_Avadine_19500.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.14952,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 116798,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 5921,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623149
-              },
-              {
-                "chunk_count": 4,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187930,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68d7ad00af5c11f0820b0a72fe6824b7",
-                "location": "Inv_28130_from_MTheory_Consulting_Group_LLC_24420.pdf",
-                "meta_fields": {},
-                "name": "Inv_28130_from_MTheory_Consulting_Group_LLC_24420.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.13809,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 115336,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 676,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623138
-              },
-              {
-                "chunk_count": 42,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187910,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68d493c2af5c11f0820b0a72fe6824b7",
-                "location": "IFS_North_America_Inc_PJ2500685.pdf",
-                "meta_fields": {},
-                "name": "IFS_North_America_Inc_PJ2500685.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 305403,
-                "progress": -1,
-                "progress_msg": "\n09:43:43 Task has been received.\n09:46:46 Page(1~8): Start to parse.\n09:46:46 Page(1~8): Visual model detected. Attempting to enhance figure extraction...\n09:46:46 Page(1~8): OCR started\n09:47:05 Page(1~8): Processing...\n09:47:06 Page(1~8): OCR finished (22.41s)\n09:47:10 Page(1~8): Layout analysis (4.50s)\n09:47:11 Page(1~8): Table analysis (0.88s)\n09:47:11 Page(1~8): Text merged (0.01s)\n09:47:12 Page(1~8): Basic parsing complete. Proceeding with figure enhancement...\n09:47:12 Page(1~8): [ERROR]cannot identify image file <_io.BytesIO object at 0x78360ad41710>\n09:47:12 Page(1~8): Finish parsing.\n09:47:12 Page(1~8): Generate 14 chunks\n09:47:14 Page(1~8): Embedding chunks (1.75s)\n09:47:14 Page(1~8): Indexing done (0.25s).\n09:47:14 Page(1~8): Task done (221.99s)\n22:29:38 Task has been received.\n22:29:40 Page(1~8): Start to parse.\n22:29:41 Page(1~8): Visual model detected. Attempting to enhance figure extraction...\n22:29:41 Page(1~8): OCR started\n22:32:33 Page(1~8): Processing...\n22:32:44 Page(1~8): OCR finished (196.65s)\n22:33:32 Page(1~8): Layout analysis (49.62s)\n22:33:36 Page(1~8): Table analysis (3.82s)\n22:33:36 Page(1~8): Text merged (0.02s)\n22:33:36 Page(1~8): Basic parsing complete. Proceeding with figure enhancement...\n22:33:37 Page(1~8): [ERROR]cannot identify image file <_io.BytesIO object at 0x7ce1a4fada30>\n22:33:37 Page(1~8): Finish parsing.\n22:33:38 Page(1~8): Generate 14 chunks\n22:33:40 Page(1~8): Embedding chunks (2.50s)\n22:33:42 Page(1~8): Indexing done (1.16s).\n22:33:42 Page(1~8): Task done (258.94s)",
-                "run": "FAIL",
-                "size": 102674,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 27568,
-                "type": "pdf",
-                "update_date": "Tue, 28 Oct 2025 22:33:42 GMT",
-                "update_time": 1761662022240
-              },
-              {
-                "chunk_count": 2,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187886,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68d0e812af5c11f0820b0a72fe6824b7",
-                "location": "Deloitte Invoice_8005079282.pdf",
-                "meta_fields": {},
-                "name": "Deloitte Invoice_8005079282.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.12147,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 14025,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 501,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623121
-              },
-              {
-                "chunk_count": 4,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187865,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68cdb7beaf5c11f0820b0a72fe6824b7",
-                "location": "Dec24 Floris CRC Invoice#2412.pdf",
-                "meta_fields": {},
-                "name": "Dec24 Floris CRC Invoice#2412.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.11081,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 430842,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 4544,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623111
-              },
-              {
-                "chunk_count": 2,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187840,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68c9e684af5c11f0820b0a72fe6824b7",
-                "location": "CRC Recruiting Services 1-31-25.pdf",
-                "meta_fields": {},
-                "name": "CRC Recruiting Services 1-31-25.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.10128,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 63867,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 264,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623101
-              },
-              {
-                "chunk_count": 3,
-                "chunk_method": "naive",
-                "create_date": "Wed, 22 Oct 2025 23:33:07 GMT",
-                "create_time": 1761147187809,
-                "created_by": "b5084770aec111f0a7d77e0facf24888",
-                "dataset_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-                "id": "68c51514af5c11f0820b0a72fe6824b7",
-                "location": "79569.pdf",
-                "meta_fields": {},
-                "name": "79569.pdf",
-                "parser_config": {
-                  "auto_keywords": 0,
-                  "auto_questions": 0,
-                  "chunk_token_num": 512,
-                  "delimiter": "\n",
-                  "graphrag": {
-                    "entity_types": [
-                      "organization",
-                      "person",
-                      "geo",
-                      "event",
-                      "category"
-                    ],
-                    "method": "light",
-                    "use_graphrag": true
-                  },
-                  "html4excel": false,
-                  "layout_recognize": "DeepDOC",
-                  "raptor": {
-                    "max_cluster": 64,
-                    "max_token": 256,
-                    "prompt": "Please summarize the following paragraphs. Be careful with the numbers, do not make things up. Paragraphs as following:\n      {cluster_content}\nThe above is the content you need to summarize.",
-                    "random_seed": 0,
-                    "threshold": 0.1,
-                    "use_raptor": true
-                  },
-                  "topn_tags": 3
-                },
-                "pipeline_id": null,
-                "process_begin_at": "Sat, 25 Oct 2025 09:43:39 GMT",
-                "process_duration": 4.07733,
-                "progress": 1,
-                "progress_msg": "09:43:39  Reused previous task's chunks.",
-                "run": "DONE",
-                "size": 816782,
-                "source_type": "local",
-                "status": "1",
-                "suffix": "pdf",
-                "thumbnail": null,
-                "title": null,
-                "token_count": 911,
-                "type": "pdf",
-                "update_date": "Sat, 25 Oct 2025 09:43:43 GMT",
-                "update_time": 1761356623077
-              }
-            ],
-            "total": 16
-          }
-        }
-      }
-    ],
     "Merge_0": [
       {
         "json": {
@@ -3077,78 +2196,6 @@
           "status": "1"
         }
       }
-    ],
-    "Parser_2": [
-      {
-        "json": {
-          "id": "68fa73d0af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68f746d8af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68f406e4af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68ee7878af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68ea3f24af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68e58dc6af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68e18730af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68de3c56af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68dae754af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68d7ad00af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68d0e812af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68cdb7beaf5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68c9e684af5c11f0820b0a72fe6824b7"
-        }
-      },
-      {
-        "json": {
-          "id": "68c51514af5c11f0820b0a72fe6824b7"
-        }
-      }
     ]
   },
   "connections": {
@@ -3236,6 +2283,13 @@
         [
           {
             "node": "Merge_5_Comine",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a buffer_pross_status",
             "type": "main",
             "index": 0
           }
@@ -3396,6 +2450,11 @@
             "node": "Merge_0",
             "type": "main",
             "index": 1
+          },
+          {
+            "node": "GET Document List RAGFlow_A1",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -3456,17 +2515,6 @@
         [
           {
             "node": "Get Current Registered Databases",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "GET Document List RAGFlow_A1": {
-      "main": [
-        [
-          {
-            "node": "API Badcall Ragflow Router4",
             "type": "main",
             "index": 0
           }
@@ -3785,13 +2833,24 @@
           }
         ]
       ]
+    },
+    "GET Document List RAGFlow_A1": {
+      "main": [
+        [
+          {
+            "node": "API Badcall Ragflow Router4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "d05454e5-11a3-44ea-8520-9ee56f27fcc0",
+  "versionId": "fd4a9981-7983-4277-99e0-1dbc980b9850",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "47a369a1ce1673d71cc17e924bd866435a6417177439555dd82d74b29e1e5d51"

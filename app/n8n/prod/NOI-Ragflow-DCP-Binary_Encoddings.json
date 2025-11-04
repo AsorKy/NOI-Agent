@@ -1,0 +1,672 @@
+{
+  "name": "NOI-Ragflow-DCP-Binary_Encoddings",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1472,
+        656
+      ],
+      "id": "61b362d4-d1ad-4418-879e-2f6f02431f67",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "n8n_databases",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ragflow_db_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        192
+      ],
+      "id": "ac48ecca-97c3-4742-bb49-2b39288ea9f3",
+      "name": "Get Current Registered Databases",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "vHqrEKE3qat7hcu9",
+          "name": "Supabase account_NOI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "13d9d854-0c34-458e-97ff-555c268ff998",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GOOD API"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "You don't own the dataset",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f65bc15c-360b-4aa9-95c7-755f428f025d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NO Dataset"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c9fc25-dbb1-4fef-acbe-f728f58df058",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "Authentication error: API key is invalid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BAD API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        2336,
+        848
+      ],
+      "id": "89f97c54-a843-458d-aa1b-ca33a1d366e6",
+      "name": "API Badcall Ragflow Router4"
+    },
+    {
+      "parameters": {
+        "content": "## Compare Processed Ragflow documents\n\n- Task = Compares the processed documents from Ragflow and updates buffer table and metadata table.\n\n### Inputs:\n\n- Ragflow API call with documents present in a certain database",
+        "height": 304,
+        "width": 1456,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1328,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "6d2139b1-c1b5-4a9a-a320-16116ce55aff",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "n8n_databases",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ragflow_db_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.ragflow_db_id }}"
+            },
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $('Convert Dates').item.json.create_date }}"
+            },
+            {
+              "fieldId": "last_updated",
+              "fieldValue": "={{ $('Convert Dates').item.json.update_date }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        416
+      ],
+      "id": "625ebfe3-d0e4-4e2d-bf70-9a44347d0dd7",
+      "name": "Update a DB metadata dates",
+      "credentials": {
+        "supabaseApi": {
+          "id": "vHqrEKE3qat7hcu9",
+          "name": "Supabase account_NOI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e2270927-3896-4cc1-84d7-458d1b38c4e9",
+              "leftValue": "={{ $json.ragflow_db_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2192,
+        656
+      ],
+      "id": "5a989c9a-6978-4f1b-ae07-42d4aeb56c99",
+      "name": "If_non_db"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2544,
+        672
+      ],
+      "id": "c75bcddd-0bd6-46f3-9861-dd6b98431bde",
+      "name": "Execute Register New Database",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://noncotyledonous-irreclaimable-elian.ngrok-free.dev/api/v1/datasets",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ragflow-JiOWRhOTQ4YjQxNzExZjBiNzM0NGFkY2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1760,
+        176
+      ],
+      "id": "0b2991ba-a134-452c-8865-b95531db7a9f",
+      "name": "GET Ragflow Databases",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4679893e-1eef-45e7-88d1-b9902bf0b35b",
+              "name": "id",
+              "value": "={{ $json.data[0].id }}",
+              "type": "string"
+            },
+            {
+              "id": "615c9649-dbeb-422d-9ca5-525d7d7fcb9e",
+              "name": "create_date",
+              "value": "={{ $json.data[0].create_date }}",
+              "type": "string"
+            },
+            {
+              "id": "719ee8c9-b7aa-46a1-865c-2837478051a7",
+              "name": "update_date",
+              "value": "={{ $json.data[0].update_date }}",
+              "type": "string"
+            },
+            {
+              "id": "683ce422-c23e-46ab-9fa4-906c8d252fc3",
+              "name": "tenant_id",
+              "value": "={{ $json.data[0].tenant_id }}",
+              "type": "string"
+            },
+            {
+              "id": "70d9a1f0-4eeb-4502-8e9b-06afb84ffa33",
+              "name": "name",
+              "value": "={{ $json.data[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ad8b0ae-86a9-4f21-b79c-f7407d3269dc",
+              "name": "language",
+              "value": "={{ $json.data[0].language }}",
+              "type": "string"
+            },
+            {
+              "id": "a34e6d7a-a65b-4389-b6e9-fcb917f21ee2",
+              "name": "description",
+              "value": "={{ $json.data[0].description }}",
+              "type": "string"
+            },
+            {
+              "id": "35eb9a78-977f-4891-a8aa-e11b32f8cf6d",
+              "name": "embedding_model",
+              "value": "={{ $json.data[0].embedding_model }}",
+              "type": "string"
+            },
+            {
+              "id": "27005ae7-a510-481d-88b0-e958ec67e1b7",
+              "name": "permission",
+              "value": "={{ $json.data[0].permission }}",
+              "type": "string"
+            },
+            {
+              "id": "7f3d0e32-a8f8-42ab-8e76-91a76c1b1ccd",
+              "name": "created_by",
+              "value": "={{ $json.data[0].created_by }}",
+              "type": "string"
+            },
+            {
+              "id": "e2d78bdd-4f05-443f-ace7-97300787a44e",
+              "name": "doc_num",
+              "value": "={{ $json.data[0].document_count }}",
+              "type": "number"
+            },
+            {
+              "id": "18dbfea6-175d-4e29-b206-c43c6e92bfea",
+              "name": "token_num",
+              "value": "={{ $json.data[0].token_num }}",
+              "type": "number"
+            },
+            {
+              "id": "57e8229d-1a86-4465-8ee8-f2b88b807b80",
+              "name": "chunk_num",
+              "value": "={{ $json.data[0].chunk_count }}",
+              "type": "number"
+            },
+            {
+              "id": "d411ab6b-f8fa-4a2f-806c-424b7b0c796d",
+              "name": "similarity_threshold",
+              "value": "={{ $json.data[0].similarity_threshold }}",
+              "type": "number"
+            },
+            {
+              "id": "c1cf23d6-f261-4e44-86e0-a75bf172bfb2",
+              "name": "vector_similarity_weight",
+              "value": "={{ $json.data[0].vector_similarity_weight }}",
+              "type": "number"
+            },
+            {
+              "id": "6ae5582e-07b0-4312-92f0-1daf1d1c7080",
+              "name": "parser_id",
+              "value": "={{ $json.data[0].pipeline_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c2ee6192-f828-4b25-87f8-f79a5f588fdd",
+              "name": "parser_config",
+              "value": "={{ $json.data[0].parser_config }}",
+              "type": "object"
+            },
+            {
+              "id": "8f4d757d-a0bf-42ba-af43-4289bfcdf396",
+              "name": "pagerank",
+              "value": "={{ $json.data[0].pagerank }}",
+              "type": "number"
+            },
+            {
+              "id": "718e29b3-cbf9-4d10-b4b9-ac4216877da7",
+              "name": "status",
+              "value": "={{ $json.data[0].status }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        400
+      ],
+      "id": "83bcbffb-a96f-438a-b834-058be675eb80",
+      "name": "Edit DB Keys"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Conversion of date fields from ragflow databases\n\nreturn items.map(item => {\n  \n  const data = item.json;\n\n  // Función para formatear la fecha\n  function formatToSupabase(dateString) {\n    if (!dateString || typeof dateString !== 'string') {\n      return null; // O devuelve el valor original\n    }\n\n    const dateObject = new Date(dateString);\n\n    // 1. Obtenemos el string ISO (ej: 2025-10-22T23:32:44.000Z)\n    const isoString = dateObject.toISOString();\n\n    // 2. Quitamos la 'Z' del final\n    //    (Resultado: \"2025-10-22T23:32:44.000\")\n    const withoutZ = isoString.slice(0, -1);\n\n    // 3. Añadimos los 3 ceros extra (microsegundos) y el \"+00:00\"\n    //    (Resultado: \"2025-10-22T23:32:44.000000+00:00\")\n    return withoutZ + \"000+00:00\";\n  }\n\n  // --- create_date conversion ---\n  data.create_date = formatToSupabase(data.create_date);\n\n  // --- update_date conversion ---\n  data.update_date = formatToSupabase(data.update_date);\n\n  // Output\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        656
+      ],
+      "id": "1fee7014-c100-4a5c-acbd-01ac2cc6b1aa",
+      "name": "Convert Dates"
+    },
+    {
+      "parameters": {
+        "content": "## Database ID GET\n",
+        "height": 1408,
+        "width": 1456
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1328,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "4513f998-ee32-4920-a096-89ad5144ca7d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1472,
+        912
+      ],
+      "id": "fdf31826-bd02-4fca-b9af-d0bd0f5557ba",
+      "name": "Merge_0"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://noncotyledonous-irreclaimable-elian.ngrok-free.dev/ragflow_b5084770aec111f0a7d77e0facf24888/_search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": {\n    \"match_all\": {}\n  },\n  \"_source\": [\n    \"doc_id\",\n    \"docnm_kwd\",\n    \"kb_id\",\n    \"content_ltks\",\n    \"q_768_vec\"\n  ],\n  \"size\": 100\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1968,
+        912
+      ],
+      "id": "1ccd1644-e11b-4984-a9ea-99fe6ca8eaad",
+      "name": "GET Document List RAGFlow_A1",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "IsstbKbXJjHDD9Hu",
+          "name": "ElsticSearch"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Database Ingestion: Processed documents to central database",
+        "height": 2704,
+        "width": 4752,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2816,
+        -1424
+      ],
+      "typeVersion": 1,
+      "id": "eddd5ee7-1c77-4006-8421-36bdfb7d71d3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.elasticsearch",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        1328
+      ],
+      "id": "5f5a83b4-3864-49a8-9abc-d93844954b48",
+      "name": "Get many documents",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        560
+      ],
+      "id": "98085033-0656-46b0-ad55-07784fd41e4b",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "vHqrEKE3qat7hcu9",
+          "name": "Supabase account_NOI"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Merge_0": [
+      {
+        "json": {
+          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
+          "Key": "CRC-NOI-bucket/PDF_test.pdf",
+          "Id": "41fcf38f-4576-4464-8de5-99d89d5ae4fe"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Get Current Registered Databases": {
+      "main": [
+        [
+          {
+            "node": "Update a DB metadata dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a DB metadata dates": {
+      "main": [
+        [
+          {
+            "node": "If_non_db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If_non_db": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Execute Register New Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Ragflow Databases": {
+      "main": [
+        [
+          {
+            "node": "Edit DB Keys",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit DB Keys": {
+      "main": [
+        [
+          {
+            "node": "Convert Dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Dates": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge_0": {
+      "main": [
+        []
+      ]
+    },
+    "GET Document List RAGFlow_A1": {
+      "main": [
+        [
+          {
+            "node": "API Badcall Ragflow Router4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Convert Dates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Document List RAGFlow_A1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge_0",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge_0",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "GET Ragflow Databases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7ac104de-eea0-4539-95cf-257362735a4d",
+  "meta": {
+    "instanceId": "47a369a1ce1673d71cc17e924bd866435a6417177439555dd82d74b29e1e5d51"
+  },
+  "id": "GE0yGsOYagfvWOzy",
+  "tags": []
+}

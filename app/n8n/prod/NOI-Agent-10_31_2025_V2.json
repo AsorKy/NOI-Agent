@@ -898,8 +898,32 @@
                 },
                 "conditions": [
                   {
+                    "leftValue": "={{ $json.error }}",
+                    "rightValue": "ragflow_id",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "da52111f-8458-4616-92c9-b54381dbaee1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
                     "id": "82ec2b65-d70a-429e-88d8-55a74415a13a",
-                    "leftValue": "={{ $json.error.message }}",
+                    "leftValue": "={{ $json.error }}",
                     "rightValue": "",
                     "operator": {
                       "type": "string",
@@ -912,30 +936,6 @@
               },
               "renameOutput": true,
               "outputKey": "new upload"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.error.message }}",
-                    "rightValue": "duplicate key value violates unique constraint",
-                    "operator": {
-                      "type": "string",
-                      "operation": "contains"
-                    },
-                    "id": "da52111f-8458-4616-92c9-b54381dbaee1"
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "duplicate"
             }
           ]
         },
@@ -1253,12 +1253,14 @@
       ],
       "id": "5c20a5c6-fc82-496e-b630-e04889104e2e",
       "name": "Insert Buffer Record: Upload_",
+      "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
           "id": "vHqrEKE3qat7hcu9",
           "name": "Supabase account_NOI"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -1374,7 +1376,7 @@
     {
       "parameters": {
         "content": "## Tool to Add a Google Drive File to Vector DB",
-        "height": 3811,
+        "height": 1891,
         "width": 5601,
         "color": 5
       },
@@ -1495,8 +1497,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        1440,
-        1776
+        1424,
+        1248
       ],
       "id": "cccf40e3-7535-46f7-be32-4755a829d49a",
       "name": "Upload to buffer switch4"
@@ -1535,6 +1537,12 @@
       "id": "264c617b-dffd-4d3a-89d6-b56d17a84683",
       "name": "Download file5",
       "executeOnce": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "VzHJRfb0BwXKHDUI",
+          "name": "Google Drive account_NOI"
+        }
+      },
       "disabled": true
     },
     {
@@ -1566,8 +1574,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1056,
-        3040
+        1024,
+        1856
       ],
       "id": "2ad1333f-2782-42f3-98b2-0e892c78cee3",
       "name": "GET UnUploaded IDS From Buffer_A1",
@@ -1626,8 +1634,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1200,
-        1072
+        1424,
+        832
       ],
       "id": "f10d652d-386c-4140-96e8-b87c59436857",
       "name": "ENV_VARIABLES1"
@@ -1641,8 +1649,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        6192,
-        2528
+        6176,
+        592
       ],
       "typeVersion": 1,
       "id": "e142e3c8-816a-4602-8ce4-1436fb752569",
@@ -1655,8 +1663,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        7040,
-        2880
+        7024,
+        944
       ],
       "id": "724ed206-f96c-4e4d-9905-06f076cfaf4d",
       "name": "Wait4",
@@ -1672,8 +1680,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        6480,
-        2784
+        6464,
+        848
       ],
       "id": "a2108dd5-da5b-4a64-b8e1-f47d1b225d62",
       "name": "Split RAGFlow Docs6",
@@ -1687,8 +1695,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        6256,
-        2784
+        6240,
+        848
       ],
       "id": "5bcc7756-a2aa-47ff-b655-2f6fe947ed48",
       "name": "SPLIT Ragflow Docs5",
@@ -1705,8 +1713,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6656,
-        2880
+        6640,
+        944
       ],
       "id": "6f3021d5-89cc-466a-a492-baf8878c8664",
       "name": "PARSE RAGFlow Docs9",
@@ -1724,8 +1732,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6256,
-        2608
+        6240,
+        672
       ],
       "id": "d3cae50a-d7b7-4144-b573-fee9ac732e34",
       "name": "PARSE Docs in Supabase2",
@@ -1737,8 +1745,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        7040,
-        2672
+        7024,
+        736
       ],
       "id": "2e2bbda7-81a8-4e02-a81a-8d6add80c3a7",
       "name": "MERGE Doc Queries1",
@@ -1758,8 +1766,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        6816,
-        2768
+        6800,
+        832
       ],
       "id": "c3febd88-832c-41b9-9916-b195b0a2b167",
       "name": "Aggregate: RAGFlow2",
@@ -1779,8 +1787,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        6816,
-        2608
+        6800,
+        672
       ],
       "id": "df4403b4-77fb-4dae-8ac5-76ea388ff349",
       "name": "Aggregate: Supabase2",
@@ -1847,8 +1855,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        7232,
-        2880
+        7216,
+        944
       ],
       "id": "6d96272d-88a1-4091-8c49-f4d3cfcbc987",
       "name": "Switch DB Query Router1",
@@ -1862,8 +1870,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        7680,
-        2672
+        7664,
+        736
       ],
       "id": "f4b0815f-d579-45c3-bdc5-e069ecb65c66",
       "name": "SPLIT Supa Docs1",
@@ -1907,8 +1915,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        7440,
-        2672
+        7424,
+        736
       ],
       "id": "110366d4-f4a6-4508-913e-90114270aaa5",
       "name": "Supa_Data_Checker1",
@@ -1952,8 +1960,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        7440,
-        3104
+        7424,
+        1168
       ],
       "id": "7fe68ce3-bbea-429e-bfa6-7def3373c1e7",
       "name": "Ragf_Data_Checker1",
@@ -1970,8 +1978,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        8240,
-        2848
+        8224,
+        912
       ],
       "id": "371de5ba-7b8c-4aca-9f39-6481aeebf442",
       "name": "PARSE Supa Names1",
@@ -1986,8 +1994,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        7680,
-        3104
+        7664,
+        1168
       ],
       "id": "c1f2adcf-e7d7-4965-b080-a2e5ba4674e8",
       "name": "SPLIT Ragf Docs1",
@@ -2002,8 +2010,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        7904,
-        3104
+        7888,
+        1168
       ],
       "id": "aeac9f7c-cfe5-402c-bacc-b6afdb7db488",
       "name": "LOOP Parser4",
@@ -2018,8 +2026,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        7904,
-        2672
+        7888,
+        736
       ],
       "id": "545a24db-9efa-4d2b-ab51-63b0efc1208a",
       "name": "LOOP Parser5",
@@ -2131,8 +2139,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        8064,
-        2752
+        8048,
+        816
       ],
       "id": "0e190a2e-a57d-4e08-a580-9d8df5da3fba",
       "name": "Existence Conditions  Supa1",
@@ -2213,8 +2221,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        8064,
-        3184
+        8048,
+        1248
       ],
       "id": "05e2d967-633f-4ba3-b2b9-f6784815077d",
       "name": "Existence Conditions  RAGF1",
@@ -2231,8 +2239,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        8240,
-        3184
+        8224,
+        1248
       ],
       "id": "96521e19-47cb-40c5-bdd9-d0489c31e5a4",
       "name": "PARSE Ragf Docs1",
@@ -2250,8 +2258,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        8640,
-        3328
+        8624,
+        1392
       ],
       "id": "207bea1d-adcd-4a60-9403-1b59f24005a3",
       "name": "PARSE Processing State1",
@@ -2286,8 +2294,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        8400,
-        3184
+        8384,
+        1248
       ],
       "id": "27a63196-5220-4f78-b311-fb1b6f15a4a9",
       "name": "Pross Status1",
@@ -2302,8 +2310,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        8848,
-        3184
+        8832,
+        1248
       ],
       "id": "ecbf14dc-2493-4097-bdef-d40015f44dcc",
       "name": "LOOP Parser6",
@@ -2318,8 +2326,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        9232,
-        3328
+        9216,
+        1392
       ],
       "id": "84b8d1c2-c351-40cc-ab21-338b2c4206a1",
       "name": "Edit Fields",
@@ -2363,8 +2371,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        9056,
-        3264
+        9040,
+        1328
       ],
       "id": "78ecf63b-a856-48eb-b7d4-859255d71cfb",
       "name": "If4",
@@ -2407,8 +2415,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        10512,
-        2800
+        10496,
+        864
       ],
       "id": "0e4b2892-c2b9-44f8-bc99-ddd630f7966e",
       "name": "UPDATE Up Ragflow7",
@@ -2442,8 +2450,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        10128,
-        2736
+        10112,
+        800
       ],
       "id": "7942f356-7291-414e-b72c-773083571cc1",
       "name": "If5",
@@ -2458,8 +2466,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        9936,
-        2656
+        9920,
+        720
       ],
       "id": "763b425d-6505-458b-ba7a-8c4cad8b0984",
       "name": "LOOP Parser7",
@@ -2473,8 +2481,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        9712,
-        2656
+        9696,
+        720
       ],
       "id": "93a3a5d2-6cdc-454d-a88b-281b8ea41ebe",
       "name": "SPLIT Ragflow UploadedDocs1",
@@ -2485,8 +2493,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        8640,
-        2896
+        8624,
+        960
       ],
       "id": "1e143df8-c160-417c-bccb-e899e111ec55",
       "name": "MERGE Doc Checker1",
@@ -2499,8 +2507,8 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        8848,
-        2896
+        8832,
+        960
       ],
       "id": "396f02f8-6c05-4139-af93-11bc6861275d",
       "name": "Remove Duplicates1",
@@ -2539,8 +2547,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        9472,
-        2656
+        9456,
+        720
       ],
       "id": "fdbbd05e-d889-44dd-bf96-1431f1ee8415",
       "name": "POST Upload Docs to RAGFlow1",
@@ -2577,8 +2585,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        9248,
-        2656
+        9232,
+        720
       ],
       "id": "06eb1c8a-bc38-4261-ab91-431b545f708f",
       "name": "GET Documents from Suapabase4",
@@ -2625,8 +2633,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        9056,
-        2896
+        9040,
+        960
       ],
       "id": "b770d159-b174-4018-af9b-9e345d0a1267",
       "name": "Supa-to-Rag-Selector1",
@@ -2641,8 +2649,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        10352,
-        2976
+        10336,
+        1040
       ],
       "id": "b1a7cd58-5510-4462-807f-bf2c780c8c9d",
       "name": "PARSE id ragflow1",
@@ -2657,8 +2665,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        10352,
-        2800
+        10336,
+        864
       ],
       "id": "3c6ad916-d5a9-48ba-9f48-7c8fbb76c28a",
       "name": "PARSE Meta buffer1",
@@ -2669,8 +2677,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        10672,
-        2976
+        10656,
+        1040
       ],
       "id": "ab2f4b9e-7a8a-4fea-97c7-7a0b7fe62cce",
       "name": "No Operation, do nothing3",
@@ -2684,8 +2692,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2352,
-        4512
+        2336,
+        2576
       ],
       "typeVersion": 1,
       "id": "fc096378-7b86-41a5-835a-e8e6afb753c3",
@@ -2701,8 +2709,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2448,
-        4624
+        2432,
+        2688
       ],
       "id": "a13c3333-a7d3-47a9-bfbe-adec38c75b9f",
       "name": "GET Uploaded Files1",
@@ -2718,8 +2726,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2688,
-        4624
+        2672,
+        2688
       ],
       "id": "dfe5cd87-d935-4e8d-a6a1-46dd11343b50",
       "name": "Split RAGFlow Docs7",
@@ -2736,8 +2744,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2896,
-        4752
+        2880,
+        2816
       ],
       "id": "ca684e32-c5db-4946-bbdc-4c10a5c1bbb7",
       "name": "PARSE RAGFlow Docs10",
@@ -2747,12 +2755,12 @@
     {
       "parameters": {
         "content": "## RAGFlow and Spabase queries\n",
-        "height": 416,
-        "width": 3408
+        "height": 304,
+        "width": 1120
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2464,
+        2480,
         832
       ],
       "typeVersion": 1,
@@ -2767,8 +2775,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        6688,
-        3872
+        6672,
+        1936
       ],
       "id": "ae687ffe-ba4e-419f-9563-e7e3cba774b8",
       "name": "SPLIT Ragflow Docs6",
@@ -2783,8 +2791,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        6912,
-        3872
+        6896,
+        1936
       ],
       "id": "09278e65-e961-46ba-97f8-9d515a8dafc1",
       "name": "Split RAGFlow Docs8",
@@ -2899,8 +2907,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        7088,
-        4128
+        7072,
+        2192
       ],
       "id": "4fd63346-c82d-4a3c-b372-8b17a9794d15",
       "name": "Pross Router4",
@@ -2917,8 +2925,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6944,
-        4160
+        6928,
+        2224
       ],
       "id": "f4381043-e6d9-4d43-9f75-5536f02aa16b",
       "name": "PARSE RAGFlow Docs13",
@@ -2962,8 +2970,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        7968,
-        4144
+        7952,
+        2208
       ],
       "id": "c76a0121-6aed-4001-ba91-6105b18f5873",
       "name": "UPDATE Pross Ragflow Buffer1",
@@ -2981,8 +2989,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        7616,
-        4336
+        7600,
+        2400
       ],
       "id": "047f3a3c-3e48-41d9-be3b-f4e0881c744a",
       "name": "PARSE Error1",
@@ -3000,8 +3008,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        7616,
-        3968
+        7600,
+        2032
       ],
       "id": "c2ddb595-9783-4434-b478-343cdae860a9",
       "name": "PARSE Processed1",
@@ -3019,8 +3027,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        7616,
-        4144
+        7600,
+        2208
       ],
       "id": "fc84c515-04f1-4e66-ae3b-211f63a10290",
       "name": "PARSE Unprocessed1",
@@ -3038,8 +3046,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        7616,
-        4512
+        7600,
+        2576
       ],
       "id": "799a5967-bfd7-42ff-b377-496cd43b1467",
       "name": "PARSE Processing1",
@@ -3054,8 +3062,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        6608,
-        3712
+        6592,
+        1776
       ],
       "typeVersion": 1,
       "id": "20aa4c78-5a31-4bb3-a21c-8be6c19a982c",
@@ -3066,8 +3074,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        7968,
-        4336
+        7952,
+        2400
       ],
       "id": "dc6d7b56-7835-4df2-bc4d-8d1f349134d9",
       "name": "No Operation, do nothing5",
@@ -3082,8 +3090,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        8400,
-        3712
+        8384,
+        1776
       ],
       "typeVersion": 1,
       "id": "a5f02701-6910-4199-9535-4b4c15aa9887",
@@ -3100,8 +3108,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        8144,
-        4496
+        8128,
+        2560
       ],
       "id": "821cbae9-314a-4e6e-ac1a-84506823ffbf",
       "name": "PARSE RAGFlow Docs14",
@@ -3124,8 +3132,8 @@
       "type": "n8n-nodes-base.compareDatasets",
       "typeVersion": 2.3,
       "position": [
-        7936,
-        3792
+        7920,
+        1856
       ],
       "id": "53165a3b-c633-47a8-862d-31f2d8f2a116",
       "name": "Compare Datasets1",
@@ -3158,8 +3166,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        8480,
-        4064
+        8464,
+        2128
       ],
       "id": "989ff6cb-2380-462e-aeff-8e853ac64025",
       "name": "GET Documents from Suapabase5",
@@ -3191,8 +3199,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        8480,
-        4480
+        8464,
+        2544
       ],
       "id": "6248b176-5b09-43d2-9266-2ed45430fc37",
       "name": "GET Documents from RAGFlow1",
@@ -3228,8 +3236,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        8480,
-        4272
+        8464,
+        2336
       ],
       "id": "952c5490-013b-435f-aa99-dd37b01ade79",
       "name": "GET Documents from Suapabase6",
@@ -3265,8 +3273,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        8480,
-        3856
+        8464,
+        1920
       ],
       "id": "768ee93a-f2cb-4a82-94fe-4ad8db1b5c21",
       "name": "GET Documents from Suapabase7",
@@ -3304,8 +3312,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        8768,
-        4480
+        8752,
+        2544
       ],
       "id": "7fbeb6e7-5364-4f5e-a43e-3500354446e9",
       "name": "Upload to Supabase5",
@@ -3422,8 +3430,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        8960,
-        4448
+        8944,
+        2512
       ],
       "id": "cb596159-3211-43a2-9aa7-9a38027acfb2",
       "name": "Upload to buffer switch5",
@@ -3440,8 +3448,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        9456,
-        4512
+        9440,
+        2576
       ],
       "id": "9f29320c-4f1c-435f-b83e-712b4370bb88",
       "name": "CLEAN Key3",
@@ -3457,8 +3465,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        9248,
-        4448
+        9232,
+        2512
       ],
       "id": "0c6f1d12-a466-4dc0-9e2e-f00a5a4463d3",
       "name": "Clean Keys Loop3",
@@ -3495,8 +3503,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        9664,
-        4512
+        9648,
+        2576
       ],
       "id": "521d4c0f-4527-49d4-90ab-f094ad79db6e",
       "name": "UPDATE Up Status1",
@@ -3534,8 +3542,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        7392,
-        4144
+        7376,
+        2208
       ],
       "id": "8935fd7a-2416-499d-8fcf-7f7f32f92d79",
       "name": "POST Activate RAGFlow2",
@@ -3577,8 +3585,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        10784,
-        4032
+        10768,
+        2096
       ],
       "id": "f4b2a782-cd33-4754-93d7-d06da2e4c859",
       "name": "POST Activate RAGFlow3",
@@ -3603,8 +3611,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        10544,
-        4032
+        10528,
+        2096
       ],
       "id": "0c457c95-c78b-4bea-819b-b161ca46e546",
       "name": "Aggregate1",
@@ -3615,8 +3623,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        9712,
-        3152
+        9696,
+        1216
       ],
       "id": "2057e41d-b7a4-467c-8a2c-bdca46616b93",
       "name": "Merge3",
@@ -3681,8 +3689,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        11024,
-        4032
+        11008,
+        2096
       ],
       "id": "3e065d40-64c8-4821-83ca-04653e379b73",
       "name": "Pross Router5",
@@ -3696,8 +3704,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        10368,
-        4944
+        10352,
+        3008
       ],
       "typeVersion": 1,
       "id": "e6e6bf14-f1ae-4d36-9b31-d4233aabf0c4",
@@ -3720,8 +3728,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        10464,
-        5072
+        10448,
+        3136
       ],
       "id": "27b19109-ca6f-44a4-9c27-1b2b75bba9c9",
       "name": "GET Document List RAGFlow_B3",
@@ -3813,8 +3821,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        10688,
-        5056
+        10672,
+        3120
       ],
       "id": "2716d2bd-13d6-4561-bac2-53fe9f8774eb",
       "name": "API Badcall Ragflow Router5"
@@ -3827,8 +3835,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        10976,
-        5072
+        10960,
+        3136
       ],
       "id": "2c137358-06c1-4132-afbe-76b53d5b7528",
       "name": "SPLIT Ragflow Docs7"
@@ -3842,8 +3850,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        11168,
-        5072
+        11152,
+        3136
       ],
       "id": "e7d65bb4-df96-4ab3-8915-2ece42d7d430",
       "name": "Split RAGFlow Docs9"
@@ -3859,8 +3867,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        11408,
-        5200
+        11392,
+        3264
       ],
       "id": "35a46577-ff40-425c-8036-27651b996b2e",
       "name": "PARSE RAGFlow Docs15",
@@ -3903,8 +3911,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        11632,
-        5200
+        11616,
+        3264
       ],
       "id": "5e9e6b64-1b95-4df6-b843-f5fcaace125b",
       "name": "UPDATE Up Ragflow8",
@@ -3994,8 +4002,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        11168,
-        5328
+        11152,
+        3392
       ],
       "id": "e88bee6f-8057-4149-9ae3-c0b7647f2ddf",
       "name": "Pross Router6"
@@ -4011,8 +4019,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        11408,
-        5376
+        11392,
+        3440
       ],
       "id": "06124299-1147-4b8d-a4e8-a2b9e7fa8d1e",
       "name": "PARSE RAGFlow Docs16",
@@ -4029,8 +4037,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        11408,
-        5568
+        11392,
+        3632
       ],
       "id": "b264adc8-ab9d-4f13-9e7b-bf58c49a123a",
       "name": "PARSE RAGFlow Docs17",
@@ -4073,8 +4081,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        11632,
-        5376
+        11616,
+        3440
       ],
       "id": "8968e8b9-0082-4305-9d35-cffb52fd4ca0",
       "name": "UPDATE Up Ragflow9",
@@ -4117,8 +4125,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        11632,
-        5568
+        11616,
+        3632
       ],
       "id": "569f1f70-8c7c-46e9-a135-6984ba43e1bd",
       "name": "UPDATE Up Ragflow10",
@@ -4129,8 +4137,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        11872,
-        5568
+        11856,
+        3632
       ],
       "id": "50e505ab-b204-4201-8048-a036704c3cd5",
       "name": "No Operation, do nothing6"
@@ -4152,8 +4160,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        12112,
-        5056
+        12096,
+        3120
       ],
       "id": "4f8f02d7-68d6-48ff-9984-c89bacbc23c8",
       "name": "GET Document List RAGFlow_B4",
@@ -4245,8 +4253,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        12368,
-        5040
+        12352,
+        3104
       ],
       "id": "9d61a028-7669-4711-bcf4-016dc9691ec3",
       "name": "API Badcall Ragflow Router6"
@@ -4259,8 +4267,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        12656,
-        5056
+        12640,
+        3120
       ],
       "id": "54e3fe87-1215-4a51-bf8b-851b01016b76",
       "name": "SPLIT Ragflow Docs8"
@@ -4274,8 +4282,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        12864,
-        5056
+        12848,
+        3120
       ],
       "id": "977f1dad-e68c-43e3-bc16-1bf19aca5d30",
       "name": "Split RAGFlow Docs10"
@@ -4291,8 +4299,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        13088,
-        5184
+        13072,
+        3248
       ],
       "id": "dbab8ad6-acbb-466f-bfbd-9869e9db8ad4",
       "name": "PARSE RAGFlow Docs18",
@@ -4335,8 +4343,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        13312,
-        5184
+        13296,
+        3248
       ],
       "id": "cf179195-a36f-44c4-8b46-0e26815e7167",
       "name": "UPDATE Up Ragflow11",
@@ -4426,8 +4434,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        12848,
-        5312
+        12832,
+        3376
       ],
       "id": "524fadd8-6e2c-46db-b4c9-83aea74fc307",
       "name": "Pross Router7"
@@ -4443,8 +4451,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        13088,
-        5360
+        13072,
+        3424
       ],
       "id": "fb7c0b16-0899-426a-bd38-37870394bc77",
       "name": "PARSE RAGFlow Docs19",
@@ -4461,8 +4469,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        13088,
-        5552
+        13072,
+        3616
       ],
       "id": "33195a0d-0dd4-4675-afeb-32d067bc9eb0",
       "name": "PARSE RAGFlow Docs20",
@@ -4505,8 +4513,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        13312,
-        5360
+        13296,
+        3424
       ],
       "id": "e3b7549e-bdaa-446d-8699-a2a7e6c91067",
       "name": "UPDATE Up Ragflow12",
@@ -4549,8 +4557,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        13312,
-        5552
+        13296,
+        3616
       ],
       "id": "323928b3-e061-4a06-be29-d6dfa9f737d5",
       "name": "UPDATE Up Ragflow13",
@@ -4561,8 +4569,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        13552,
-        5552
+        13536,
+        3616
       ],
       "id": "5c32f68d-7958-40af-8f51-04829561e27f",
       "name": "No Operation, do nothing7"
@@ -4574,8 +4582,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        11888,
-        5056
+        11872,
+        3120
       ],
       "id": "5422f63c-81ef-4846-95a9-c54c1d4ad6f1",
       "name": "Wait5",
@@ -4590,8 +4598,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        10480,
-        3904
+        10464,
+        1968
       ],
       "typeVersion": 1,
       "id": "61c92d87-a2e8-4891-be6f-314dd6413e57",
@@ -4954,7 +4962,7 @@
       "parameters": {
         "content": "## SQL transactional metadata register",
         "height": 736,
-        "width": 1280,
+        "width": 1504,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -4974,8 +4982,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2352,
-        3968
+        2336,
+        2032
       ],
       "typeVersion": 1,
       "id": "0190fb11-dc54-4f4e-8dfe-5f77cf8e5152",
@@ -4998,8 +5006,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2464,
-        4064
+        2448,
+        2128
       ],
       "id": "969bc3a7-69b9-405f-8beb-e156fa86098c",
       "name": "GET Image Chunks Ragflow",
@@ -5092,8 +5100,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        2800,
-        4032
+        2784,
+        2096
       ],
       "id": "8a2c5d86-5408-4ed6-845f-4c08a4ab1585",
       "name": "API Badcall Ragflow Router",
@@ -5106,8 +5114,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2800,
-        4272
+        2784,
+        2336
       ],
       "id": "d2396b72-9105-40c7-bb2e-0611b3a915b9",
       "name": "GET Registered Chunks_images",
@@ -5350,8 +5358,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1968,
-        816
+        1936,
+        800
       ],
       "id": "6336079e-6b83-4e3f-86c9-4e046036b93e",
       "name": "Merge_"
@@ -5478,8 +5486,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1632,
-        1440
+        1744,
+        1056
       ],
       "id": "cc3b3936-8246-4112-a80d-9d8a10989c8d",
       "name": "Get already registered PDF",
@@ -5554,8 +5562,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2544,
-        1024
+        2592,
+        944
       ],
       "id": "03d4f65d-f568-443f-b47c-2cb28ddc1275",
       "name": "Merge_3"
@@ -5589,8 +5597,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1456,
-        3008
+        1472,
+        1824
       ],
       "id": "048afc17-3714-4523-89c6-df05d1cd065b",
       "name": "GET Non Available Documents in buffer",
@@ -5642,7 +5650,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3856,
+        4256,
         512
       ],
       "id": "34f64dc1-91cc-42f8-bd7e-906ea4b1d110",
@@ -5711,8 +5719,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        3808,
-        672
+        4544,
+        720
       ],
       "id": "9f0fc682-6057-4d93-97b0-7e9c8d368687",
       "name": "Available Docs in Docs Router",
@@ -5800,104 +5808,71 @@
       "typeVersion": 1.3,
       "position": [
         2768,
-        1024
+        944
       ],
       "id": "9b761f89-b8c9-4ab6-b882-e859b83769f5",
       "name": "Execute NOI-CP-Ragflow_UpdateBuffers"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "buffer",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_name",
+              "condition": "eq",
+              "keyValue": "={{ $node[\"Download file1\"].json.name }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "document_id",
+              "fieldValue": "={{ $node[\"Download file1\"].json.id }}"
+            },
+            {
+              "fieldId": "document_id",
+              "fieldValue": "={{ $node[\"Download file1\"].json.id }}"
+            },
+            {
+              "fieldId": "supabase_key",
+              "fieldValue": "={{ $('CLEAN Key_1').item.json.Id }}"
+            },
+            {
+              "fieldId": "up_status",
+              "fieldValue": "uploaded"
+            },
+            {
+              "fieldId": "up_drive_status",
+              "fieldValue": "uploaded"
+            },
+            {
+              "fieldId": "up_ragflow_status",
+              "fieldValue": "uploaded"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3776,
+        128
+      ],
+      "id": "b4cce93f-1087-480c-b21b-9d4a121b97c7",
+      "name": "Update a buffer_up_status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "vHqrEKE3qat7hcu9",
+          "name": "Supabase account_NOI"
+        }
+      }
     }
   ],
   "pinData": {
-    "Upload to Supabase": [
-      {
-        "json": {
-          "Key": "CRC-NOI-bucket/PDF_test.pdf",
-          "Id": "41fcf38f-4576-4464-8de5-99d89d5ae4fe"
-        }
-      }
-    ],
-    "Update a DB metadata dates": [
-      {
-        "json": {
-          "id": "cd146be5-e99b-4c12-b2c0-cc04e659709a",
-          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-          "db_name": "Invoices-test-1",
-          "db_type": "well_history",
-          "created_at": "2025-10-22T23:32:44+00:00",
-          "last_updated": "2025-10-28T22:33:42+00:00",
-          "current_status": "active_info"
-        }
-      }
-    ],
-    "GET Database ID": [
-      {
-        "json": {
-          "id": "cd146be5-e99b-4c12-b2c0-cc04e659709a",
-          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-          "db_name": "Invoices-test-1",
-          "db_type": "well_history",
-          "created_at": "2025-10-22T23:32:44+00:00",
-          "last_updated": "2025-10-28T22:33:42+00:00",
-          "current_status": "active_info"
-        }
-      }
-    ],
-    "Insert Metadata Record: Upload_": [
-      {
-        "json": {
-          "document_id": "1_G7dcwWgQ9IjVsVWGdUQeBf6pJLqvXw3",
-          "ragflow_id": "NULL",
-          "database_id": "cd146be5-e99b-4c12-b2c0-cc04e659709a",
-          "document_name": "PDF_test.pdf",
-          "document_url": "NULL",
-          "document_type": "well_history",
-          "document_pages": null,
-          "document_summary": null,
-          "schema": null,
-          "created_at": "2025-10-30T19:33:57.309254+00:00",
-          "last_updated": "2025-10-30T19:33:57.309254+00:00",
-          "current_status": "active_info",
-          "supabase_id": "41fcf38f-4576-4464-8de5-99d89d5ae4fe",
-          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7"
-        }
-      }
-    ],
-    "Insert Buffer Record: Upload_": [
-      {
-        "json": {
-          "id": "f0ab0d42-d7d8-44a5-a4ba-607f29e2f815",
-          "document_id": "1_G7dcwWgQ9IjVsVWGdUQeBf6pJLqvXw3",
-          "supabase_key": "41fcf38f-4576-4464-8de5-99d89d5ae4fe",
-          "ragflow_id": "pending",
-          "database_id": "cd146be5-e99b-4c12-b2c0-cc04e659709a",
-          "buffer_error_id": null,
-          "file_name": "PDF_test.pdf",
-          "up_status": "uploaded",
-          "up_drive_status": "uploaded",
-          "pross_status": "pending",
-          "created_at": "2025-10-30T19:33:57.309254+00:00",
-          "last_updated": "2025-10-30T19:33:57.309254+00:00",
-          "up_ragflow_status": "pending"
-        }
-      }
-    ],
-    "Parser_1": [
-      {
-        "json": {
-          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-          "Key": "CRC-NOI-bucket/PDF_test.pdf",
-          "Id": "41fcf38f-4576-4464-8de5-99d89d5ae4fe"
-        }
-      }
-    ],
-    "Merge_3": [
-      {
-        "json": {
-          "ragflow_db_id": "5b1a307aaf5c11f0bbe00a72fe6824b7",
-          "Key": "CRC-NOI-bucket/PDF_test.pdf",
-          "Id": "41fcf38f-4576-4464-8de5-99d89d5ae4fe"
-        }
-      }
-    ],
     "CLEAN Key_3": [
       {
         "json": {
@@ -6188,6 +6163,13 @@
     },
     "Buffer Router": {
       "main": [
+        [
+          {
+            "node": "Update a buffer_up_status",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Download file5",
@@ -7765,7 +7747,13 @@
     },
     "Parser_2": {
       "main": [
-        []
+        [
+          {
+            "node": "GET Database ID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "CLEAN Key_1": {
@@ -7784,6 +7772,11 @@
         [
           {
             "node": "Merge_3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Database ID",
             "type": "main",
             "index": 0
           }
@@ -7861,7 +7854,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "34ddaa0d-a1d7-45cd-80a5-df97866921ba",
+  "versionId": "8a4a5c4e-8898-4c5d-b8ee-f196e971e6cb",
   "meta": {
     "instanceId": "47a369a1ce1673d71cc17e924bd866435a6417177439555dd82d74b29e1e5d51"
   },
